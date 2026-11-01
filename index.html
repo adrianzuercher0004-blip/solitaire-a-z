@@ -1,0 +1,328 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#087a3e"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><title>Solitaire A-Z · Version 9.7.3</title><style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(155deg,#008044,#087039 75%,#0c9a54);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100dvh}button,select{font:inherit}button{touch-action:manipulation;cursor:pointer}header{max-width:850px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:19px 15px 8px}header strong{font-size:23px}header button{border:0;background:transparent;color:white;font-size:27px}.toolbar{max-width:850px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 15px 17px;gap:9px}.flag{background:linear-gradient(#29d17d,#0baf64);color:#045532;border-radius:7px 7px 15px 15px;padding:9px 17px;text-align:center;box-shadow:0 3px 0 #076637;font-weight:750}.flag strong{font-size:26px;display:block}.stats{text-align:center;font-size:12px}.stats b{display:block;font-size:20px}.stock{width:78px;height:105px;border:5px solid white;border-radius:13px;background:repeating-linear-gradient(45deg,#2394ff 0 12px,#4bafff 12px 24px);box-shadow:0 4px 0 #004d2d;position:relative;color:#08385b;font-weight:800}.stock span{position:absolute;right:-7px;top:-10px;border-radius:0 8px 0 9px;background:white;padding:2px 9px}.stock:disabled{opacity:.45}.board{max-width:850px;margin:10px auto 0;padding:0 9px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:7px}.column{min-width:0}.target{height:92px;border:2px dashed #5dc68f;border-radius:12px;background:#005a2e80;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:12px;color:#b6e8cc;text-align:center;font-size:12px}.target.active{background:#fffdf8;color:#624632;border:3px solid #e4a51d}.target .cat{position:absolute;top:-13px;left:0;right:0;background:#eeb83d;color:#59400c;border-radius:5px 5px 0 0;font-weight:800;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:clamp(10px,2.7vw,14px)}.target .count{font-weight:800;font-size:20px}.stack{height:clamp(340px,105vw,550px);position:relative;border-radius:10px;background:#005e3333;border:1px solid #ffffff15}.card{position:absolute;left:0;width:100%;height:clamp(104px,29vw,150px);border:3px solid #fff;border-radius:12px;background:#fffdfa;color:#60432f;box-shadow:0 4px 2px #004e3055;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden;padding:4px;font-size:clamp(12px,3.3vw,20px);font-weight:750;overflow-wrap:anywhere}.card .emoji{font-size:clamp(20px,5.5vw,35px)}.card.back{background:repeating-linear-gradient(45deg,#168bf0 0 13px,#53aeff 13px 26px);color:#c9eaff}.card.category{border-color:#ffcf4e;color:#61451b;background:#fffaf0}.card.selected{outline:4px solid #ffe03d;z-index:100!important}.card small{font-size:10px}.card.locked{background:#ddd6c9}.waste{max-width:850px;margin:0 auto 10px;width:120px;min-height:76px;background:#fffdf8;color:#63422b;border:3px solid #e4b63b;border-radius:12px;text-align:center;padding:10px;font-weight:800}.waste.selected{outline:4px solid #ffe03d}.footer{max-width:850px;margin:10px auto;padding:0 15px 30px}.message{border-radius:12px;background:#006337;padding:15px;text-align:center;min-height:66px;font-weight:650;line-height:1.4}.actions{display:flex;gap:7px;margin-top:12px}.actions button{flex:1;border:0;background:#fff4d8;color:#5e432c;border-radius:10px;padding:13px 3px;font-weight:800;font-size:clamp(11px,3vw,15px)}.overlay{position:fixed;inset:0;background:#002e20e9;display:flex;justify-content:center;align-items:center;padding:16px;z-index:200}.hidden{display:none!important}.modal{background:#fffcf3;color:#4c3a2d;border-radius:20px;padding:23px;width:min(410px,100%);text-align:center;max-height:90dvh;overflow:auto}.modal h2{color:#7544a0}.modal button,.modal select{width:100%;border:0;border-radius:10px;padding:14px;margin:8px 0}.modal button{background:#7838a2;color:white;font-weight:800}.modal select{background:#efe2f6}.sub{font-size:13px;color:#6c615b}.logo{font-size:65px}.pill{background:#eee5d6;border-radius:10px;padding:10px;font-size:13px} @media(min-width:650px){.card{font-size:18px}}
+
+/* V9: kompakter Spieltisch und Fingersteuerung */
+html,body{overscroll-behavior-y:contain}body{background:radial-gradient(ellipse at 50% 35%,#068c49 0%,#007a3d 65%,#006934 100%)}
+header{padding:13px 12px 5px}header strong{font-size:20px}.toolbar{padding:7px 12px 13px}
+.board{gap:5px;padding:0 8px}.target{height:86px;margin-bottom:8px;border-color:#147d4b;background:#005f3480}
+.stack{height:clamp(520px,150vw,900px);background:transparent;border:0;touch-action:none}.stack.empty{border:2px dashed #9ddab888;border-radius:12px;background:#004b2b44;min-height:140px}.stack.empty::before{content:"＋ Freier Platz";position:absolute;top:35px;left:0;right:0;text-align:center;color:#d6f5df;font-size:clamp(9px,2.5vw,14px);pointer-events:none}
+.card{height:clamp(106px,30vw,156px);border:3px solid #f5f2e9;border-radius:12px;background:#fffdfa;box-shadow:0 3px 2px #003d2455;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.card.back{background:repeating-linear-gradient(45deg,#1785ed 0 14px,#4cafff 14px 28px);color:#d0eaff;border-color:#f8f7ef}
+.card.category{background:#fffdf7;border:4px solid #ffc43c;color:#63492b}
+.card.selected{outline:3px solid #ffec54}.card.drag-source{opacity:.34}
+.card.drag-hover,.target.drag-hover{outline:4px solid #ffe85c;outline-offset:1px}
+.drag-ghost{position:fixed;z-index:1000;pointer-events:none;transform:translate(-50%,-38%);width:var(--ghost-width,100px);filter:drop-shadow(0 12px 10px #002b1a88);touch-action:none}
+.drag-ghost .ghost-card{position:relative;min-height:100px;background:#fffdf8;color:#684630;border:4px solid #ffe084;border-radius:12px;text-align:center;padding:16px 4px 9px;font-size:clamp(13px,4vw,20px);font-weight:800}
+.drag-ghost .ghost-count{position:absolute;right:3px;top:3px;background:#d7a21c;color:white;border-radius:20px;padding:2px 7px;font-size:11px}
+.footer{margin-top:0}.message{min-height:56px;padding:12px;font-size:14px}.waste{touch-action:none;user-select:none;-webkit-user-select:none}
+@media(max-width:420px){.card{font-size:clamp(11px,3.5vw,17px)}.target{height:76px}.target .count{font-size:16px}.flag{padding:8px 12px}}
+
+.brand{display:flex;align-items:center;gap:6px}.brand-icon{font-size:29px;line-height:1}.card.category{font-size:clamp(9px,2.5vw,15px)!important;overflow-wrap:normal;hyphens:auto}.card.category .catword{display:block;max-width:100%;overflow-wrap:break-word;hyphens:auto}.stack:empty{outline:2px dashed #75c89a;outline-offset:-3px;background:#075f3880}.stack:empty::after{content:"+ Freier Platz";position:absolute;top:28px;left:0;right:0;text-align:center;color:#d3f3df;font-size:11px;pointer-events:none}.target{font-size:clamp(9px,2vw,12px)}
+.target:not(.active){border-color:#70dca3;background:#005a2f88}.target:not(.active).drag-hover{background:#168d51;outline:4px solid #ffe85c}
+/* 9.6.1: iPhone-kompakt, alle Bedienelemente sichtbar */
+html,body{height:100%;min-height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+header{width:100%;flex:0 0 auto;padding:5px 11px 2px;min-height:38px}
+header strong{font-size:clamp(14px,4vw,19px)}
+.brand-logo{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid #f8d87d}
+.toolbar{width:100%;flex:0 0 auto;padding:4px 10px 7px;gap:6px}
+.flag{padding:4px 9px}.flag strong{font-size:20px}.stats{font-size:10px}.stats b{font-size:17px}
+.stock{width:clamp(49px,13vw,65px);height:clamp(64px,17vw,82px);border-width:3px;border-radius:9px;flex-shrink:0}
+.stock span{font-size:14px}
+.board{width:100%;flex:1 1 auto;min-height:0;margin:0 auto;padding:0 6px;gap:4px;align-items:stretch}
+.column{display:flex;flex-direction:column;min-height:0}
+.target{height:clamp(48px,11vh,72px);flex:0 0 auto;margin-bottom:5px;border-radius:9px}
+.target .cat{top:-9px;font-size:clamp(8px,2.1vw,12px)}.target .count{font-size:clamp(10px,3vw,16px)}
+.stack{height:auto!important;flex:1 1 auto;min-height:0!important;overflow:visible}
+.card{height:clamp(65px,18vw,118px);border-width:2px;border-radius:9px;font-size:clamp(9px,2.5vw,15px)}
+.card.category{border-width:3px;font-size:clamp(9px,2.2vw,14px)!important}
+.card .emoji{font-size:clamp(14px,4vw,25px)}
+.footer{flex:0 0 auto;width:100%;margin:0 auto;padding:5px 10px 5px}
+.message{padding:6px 9px;min-height:32px;font-size:clamp(10px,2.7vw,13px)}
+.actions{margin-top:5px;gap:5px}.actions button{padding:9px 2px;font-size:clamp(10px,2.8vw,14px)}
+.footer .sub{font-size:10px;margin:6px 0 0}
+.waste{position:absolute;right:13px;top:calc(env(safe-area-inset-top) + 119px);z-index:40;max-width:75px;min-height:48px;font-size:11px;padding:4px;border-width:2px}
+@media(max-height:730px){.target{height:48px}.card{height:clamp(58px,16vw,90px)}.message{min-height:26px;padding:4px}.actions button{padding:7px 2px}.footer .sub{display:none}}
+
+/* V9.7.1: responsive, kompakte Stapel und Nachziehkarte neben dem Stapel */
+.toolbar{justify-content:space-between}
+.draw-area{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.draw-area .stock,.draw-area .waste{position:relative!important;top:auto!important;right:auto!important;left:auto!important;margin:0!important;width:clamp(45px,12vw,64px)!important;height:clamp(62px,16vw,82px)!important;min-height:0!important;max-width:none!important;flex:0 0 auto;border-radius:9px;font-size:clamp(9px,2.4vw,13px);overflow-wrap:anywhere;display:flex;align-items:center;justify-content:center;padding:3px;line-height:1.1}
+.draw-area .waste.hidden{display:none!important}
+.board{flex:0 1 auto!important;min-height:0!important;align-items:start!important}
+.column{min-height:0!important}
+.stack{flex:0 0 auto!important;min-height:clamp(68px,18vw,112px)!important;height:var(--stack-height,100px)!important;overflow:visible!important}
+.stack.empty{height:clamp(68px,18vw,112px)!important;min-height:0!important}
+.stack.empty::before,.stack:empty::after{content:none!important}
+.stack.empty::after{content:'＋'!important;position:absolute;top:15px;left:0;right:0;text-align:center;color:#c4ebd6;font-size:18px;pointer-events:none}
+.card{height:clamp(66px,18vw,116px)}
+.footer{margin-top:auto!important}
+@media(max-width:420px){.brand-logo{width:30px;height:30px}.brand{font-size:16px!important}.toolbar{gap:3px}.stats{font-size:9px}.flag{padding:3px 5px}.flag strong{font-size:18px}}
+
+/* V9.7.2: keine automatischen vertikalen Ränder; alle Karten im sichtbaren Bereich */
+html,body{height:100%;height:100dvh;min-height:0;overflow:hidden}
+body{display:flex;flex-direction:column;justify-content:flex-start}
+header,.toolbar,.board,.footer{margin:0 auto!important;max-width:850px;width:100%}
+header{flex:0 0 auto;padding:4px 9px 2px;min-height:34px}
+.toolbar{flex:0 0 auto;padding:4px 8px 8px}
+.board{flex:1 1 auto!important;min-height:0!important;align-items:stretch!important;padding:0 5px;gap:4px}
+.column{min-height:0;overflow:visible}
+.target{height:clamp(49px,9dvh,67px);margin-bottom:6px}
+.stack{height:var(--stack-height,150px)!important;min-height:0!important;flex:0 0 auto!important}
+.stack.empty{height:clamp(68px,18vw,112px)!important}
+.card{height:clamp(64px,17.5vw,112px);font-size:clamp(10px,2.55vw,15px);overflow-wrap:normal;word-break:normal;hyphens:auto}
+.card.category{font-size:clamp(9px,2.4vw,14px)!important}
+.footer{flex:0 0 auto!important;margin-top:0!important;padding:3px 8px calc(4px + env(safe-area-inset-bottom))}
+.message{min-height:26px;padding:5px 7px;font-size:12px}
+.actions{margin-top:4px}.actions button{padding:7px 2px}
+.footer .sub{margin:4px 0 0}
+.draw-area{flex-direction:row-reverse} /* aufgedeckte Karte links vom blauen Stapel */
+.draw-area .waste{overflow:hidden;overflow-wrap:normal;word-break:normal;hyphens:auto;font-size:clamp(9px,2.2vw,13px)}
+@media(max-height:730px){.footer .sub{display:none}.target{height:46px}.card{height:clamp(60px,16vw,95px)}}
+</style></head><body><header><strong class="brand"><img class="brand-logo" src="icon-180.png" alt="Blumen A–Z"> Solitaire A-Z</strong><strong id="level">Level 1</strong><button id="menu" aria-label="Menü">☰</button></header><div class="toolbar"><div class="flag">Züge<strong id="moves">50</strong></div><div class="stats">Kategorien<b id="score">0/5</b></div><div class="stats">💡 Hinweise<b id="hints">3</b></div><div class="draw-area"><button class="stock" id="stock" aria-label="Karte ziehen"><span id="stockCount">0</span></button><div id="waste" class="waste hidden" data-type="waste"></div></div></div><main class="board" id="board"></main><div class="footer"><div class="message" id="message" aria-live="polite">Ziehe eine Karte oder Gruppe auf ein passendes Feld.</div><div class="actions"><button id="hint">💡 Hinweis</button><button id="undo">↶ Zurück</button><button id="restart">⟳ Neustart</button></div><p class="sub" style="color:#d5f7e3;text-align:center">Version 9.7.3 · Eigenständiges Solitaire A-Z · Ohne Werbung</p></div><div class="overlay" id="welcome"><div class="modal"><div class="logo"><img src="icon-180.png" alt="Solitaire A-Z Blumenlogo" style="width:100px;height:100px;border-radius:22px"></div><h2>Solitaire A-Z</h2><p>Verbinde passende Wörter, verschiebe ganze Kartengruppen und schalte Kategorien frei.</p><select id="difficulty"><option value="easy">🌱 Einfach · 3 Stapel</option><option value="medium">⭐ Mittel · 4 Stapel</option><option value="hard">🔥 Schwer · 5 Stapel</option><option value="expert">👑 Experte · 6 Stapel</option></select><div class="pill" id="progress"></div><button id="start">▶ Spielen</button><button id="continue" class="hidden">▶ Fortsetzen</button><p class="sub">Ziehe Karten und ganze Gruppen mit dem Finger. Ein Verschieben kostet einen Zug.</p></div></div><div class="overlay hidden" id="dialog"><div class="modal"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div id="dialogButtons"></div></div></div><script>
+window.addEventListener('error',function(e){var p=document.getElementById('progress');if(p)p.textContent='Fehler beim Laden: '+(e.message||'Unbekannt')});
+'use strict';
+const DATA=[['Obst',[['Apfel','🍎'],['Birne','🍐'],['Banane','🍌'],['Kirsche','🍒'],['Orange','🍊'],['Erdbeere','🍓'],['Trauben','🍇']]],['Haustiere',[['Hund','🐶'],['Katze','🐱'],['Hamster','🐹'],['Hase','🐰'],['Papagei','🦜'],['Goldfisch','🐠'],['Meerschweinchen','🐹']]],['Blumen',[['Rose','🌹'],['Tulpe','🌷'],['Sonnenblume','🌻'],['Lilie','💮'],['Orchidee','🌺'],['Lavendel','🪻'],['Nelke','🌸']]],['Fahrzeuge',[['Auto','🚗'],['Bus','🚌'],['Zug','🚆'],['Fahrrad','🚲'],['Traktor','🚜'],['Motorrad','🏍️'],['Flugzeug','✈️']]],['Essen',[['Pizza','🍕'],['Burger','🍔'],['Brot','🍞'],['Käse','🧀'],['Suppe','🥣'],['Nudeln','🍝'],['Reis','🍚']]],['Wetter',[['Sonne','☀️'],['Regen','🌧️'],['Schnee','❄️'],['Wolke','☁️'],['Gewitter','⛈️'],['Nebel','🌫️'],['Wind','💨']]],['Sport',[['Fussball','⚽'],['Tennis','🎾'],['Basketball','🏀'],['Golf','⛳'],['Schwimmen','🏊'],['Skifahren','⛷️'],['Radfahren','🚴']]],['Getränke',[['Wasser','💧'],['Kaffee','☕'],['Tee','🍵'],['Saft','🧃'],['Milch','🥛'],['Limonade','🥤'],['Kakao','☕']]],['Kleidung',[['Hemd','👕'],['Hose','👖'],['Jacke','🧥'],['Schuh','👟'],['Mütze','🧢'],['Kleid','👗'],['Socken','🧦']]],['Natur',[['Baum','🌳'],['Berg','⛰️'],['Pilz','🍄'],['Blatt','🍁'],['Fluss','🏞️'],['Wald','🌲'],['Stein','🪨']]],['Musik',[['Gitarre','🎸'],['Klavier','🎹'],['Trommel','🥁'],['Geige','🎻'],['Flöte','🪈'],['Trompete','🎺'],['Harfe','🪉']]],['Berufe',[['Arzt','🩺'],['Koch','👨‍🍳'],['Pilot','👨‍✈️'],['Lehrer','👩‍🏫'],['Bäcker','🥖'],['Gärtner','🪴'],['Maler','🎨']]]];
+const CFG={easy:{n:3,total:5,per:6,limit:50,hints:3},medium:{n:4,total:7,per:7,limit:75,hints:4},hard:{n:5,total:9,per:7,limit:100,hints:5},expert:{n:6,total:12,per:7,limit:130,hints:6}};
+const $=id=>document.getElementById(id),SAVE='solitaireAZ_v973',PROGRESS='solitaireAZ_v7_unlocked';let g=null,selected=null,history=[];
+function rng(seed){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}function shuffle(a,r){for(let i=a.length-1;i>0;i--){let j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}function topCard(a){return a[a.length-1]}function config(){return CFG[g.difficulty]}function moveLimit(){return g?.limit||config().limit}function unlocked(d){try{return Number(localStorage.getItem(PROGRESS+'_'+d))||1}catch(e){return 1}}function save(){try{localStorage.setItem(SAVE,JSON.stringify(g))}catch(e){}}function snapshot(){history.push(JSON.stringify(g));if(history.length>90)history.shift()}function msg(t){$('message').textContent=t}function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// Jeder Aufbau wird mit einem vollständigen, regelkonformen Lösungsweg geprüft.
+// Die Mischung verändert Wörter und Reihenfolge, nicht die garantierte Erreichbarkeit.
+function create(level,d){
+ const c=CFG[d],r=rng(level*2917+c.n*73),groups=Array.from({length:c.total},(_,i)=>DATA[(level-1+i)%DATA.length]);
+ const words=groups.map((group,i)=>shuffle(group[1].slice(0,c.per).map((v,k)=>({id:i*10+k,g:i,word:v[0],emoji:v[1],picture:k%2===0,kind:'word',key:null,lock:null})),r));
+ // Schlüssel erscheinen in früh erreichbaren Kategorien; die zugehörigen Schlösser
+ // liegen ausschließlich auf Wortkarten späterer Kategorien.
+ const pairs={easy:1,medium:2,hard:3,expert:4}[d];
+ for(let p=0;p<pairs;p++){
+   const source=p%Math.min(3,c.total),target=Math.min(c.total-1,3+p);
+   const keyCard=words[source][p%words[source].length];
+   const lockedCard=words[target][(p+2)%words[target].length];
+   const code=String.fromCharCode(65+p);
+   keyCard.key=code;lockedCard.lock=code;
+ }
+ const cats=groups.map((v,i)=>({id:1000+i,g:i,word:v[0],emoji:'👑',kind:'category'}));
+ const initial=Math.min(3,c.n),cols=Array.from({length:c.n},()=>[]);
+ const desiredStock={easy:20,medium:25,hard:30,expert:40}[d];
+ const totalCards=c.total*(c.per+1),columnCount=Math.min(totalCards-desiredStock,c.n*8);
+ const heights=Array(c.n).fill(Math.floor(columnCount/c.n));for(let i=0;i<columnCount%c.n;i++)heights[(i+level)%c.n]++; for(let t=0;t<c.n*3;t++){const a=Math.floor(r()*c.n),b=Math.floor(r()*c.n);if(a!==b&&heights[a]>5&&heights[b]<9){heights[a]--;heights[b]++;}}
+ // Karten verschiedener Kategorien werden über ALLE Spalten verteilt.
+ // Innerhalb einer Spalte bleiben die Schichten in einer lösbaren Reihenfolge.
+ const capacities=heights.map((h,i)=>h-(i<initial?1:0));
+ const remaining=[];
+ for(let group=c.total-1;group>=0;group--){
+   const order=shuffle(Array.from({length:c.n},(_,i)=>i),r);
+   const target=Math.min(words[group].length,Math.max(2,Math.ceil(columnCount/c.total)));
+   let placed=0;
+   for(let turn=0;turn<target;turn++){
+     const choices=order.filter(i=>cols[i].length<capacities[i]&&(i>=initial||group>=i));
+     if(!choices.length)break;
+     // Verschiedene Spalten bevorzugen, damit keine langen gleichartigen Blöcke entstehen.
+     const col=choices[turn%choices.length];
+     cols[col].push(words[group].pop());placed++;
+   }
+   remaining.push(...words[group]);
+ }
+ // Falls noch Plätze frei sind, nur weitere Wortkarten aus dem Nachziehvorrat nehmen.
+ // Karten werden von unten nach oben in Gruppenreihenfolge angeordnet.
+ for(let i=0;i<c.n;i++){
+   while(cols[i].length<capacities[i]){
+     const available=remaining.filter(x=>x.kind==='word'&&(i>=initial||x.g>=i)&&(cols[i].length===0||x.g<=cols[i][cols[i].length-1].g));
+     if(!available.length)break;
+     const pick=available[Math.floor(r()*available.length)];
+     cols[i].push(pick);remaining.splice(remaining.indexOf(pick),1);
+   }
+ }
+ for(let i=0;i<initial;i++)cols[i].push(cats[i]);
+ for(let group=initial;group<c.total;group++)remaining.push(cats[group]);
+ shuffle(remaining,r); // Auch im Nachziehstapel sind alle Bereiche wirklich vermischt.
+ const stockDraw=remaining.splice(0,desiredStock);
+ const state={level,difficulty:d,groups:groups.map(v=>v[0]),cols,found:Array.from({length:c.n},()=>[]),active:Array(c.total).fill(false),slotGroups:Array(c.n).fill(null),completedGroups:[],keys:[],stock:stockDraw.reverse(),reserve:remaining,waste:[],moves:0,hintsUsed:0,completed:false};
+ const minMoves=verifyDeal(state);if(minMoves===null)throw Error('Aufbau nicht lösbar – bitte erneut versuchen.');
+ state.limit=Math.max(minMoves,Math.ceil(minMoves*1.10));
+ g=state;history=[];selected=null;render('🔑 Schlüssel sammeln, Schlösser öffnen und Bereiche füllen.');
+}
+function verifyDeal(state){
+ const previous=g;g=JSON.parse(JSON.stringify(state));
+ try{
+  const c=config();
+  function place(sel,slot){
+   if(!valid(sel,{type:'found',i:slot}))return false;
+   const cards=sel.type==='waste'?[g.waste.pop()]:g.cols[sel.i].splice(sel.j);
+   if(cards[0].kind==='category'){g.slotGroups[slot]=cards[0].g;g.active[cards[0].g]=true;}
+   else{g.found[slot].push(...cards);if(g.found[slot].length===c.per){g.completedGroups.push(g.slotGroups[slot]);g.slotGroups[slot]=null;g.found[slot]=[];}}
+   for(const card of cards)if(card.key&&!g.keys.includes(card.key))g.keys.push(card.key);
+   g.moves++;return true;
+  }
+  function draw(){if(!g.stock.length){if(g.reserve.length){g.stock=g.reserve.splice(0).reverse();}else if(g.waste.length){g.stock=g.waste.reverse();g.waste=[];}else return false;}g.waste.push(g.stock.pop());return true;}
+  function takeFromDraw(kind,group,slot){
+   const budget=(g.stock.length+g.waste.length+g.reserve.length+5)*3;
+   for(let n=0;n<budget;n++){
+    const w=topCard(g.waste);
+    if(w&&w.kind===kind&&w.g===group)return place({type:'waste'},slot);
+    if(!draw())return false;
+   }
+   return false;
+  }
+  for(let group=0;group<c.total;group++){
+   const slot=group%c.n;
+   if(group<Math.min(3,c.n)){
+    const col=g.cols[group];if(!place({type:'cols',i:group,j:col.length-1},slot))return false;
+   }else if(!takeFromDraw('category',group,slot))return false;
+   // Alle jetzt oben erreichbaren Wortgruppen dieses Bereichs ablegen.
+   for(let i=0;i<g.cols.length;i++){
+    const col=g.cols[i];let j=col.length;
+    while(j>0&&col[j-1].kind==='word'&&col[j-1].g===group)j--;
+    if(j<col.length&&!place({type:'cols',i,j},slot))return false;
+   }
+   while(g.slotGroups[slot]===group){if(!takeFromDraw('word',group,slot))return false;}
+  }
+  return g.completedGroups.length===c.total&&g.cols.every(x=>!x.length)&&!g.stock.length&&!g.reserve.length&&!g.waste.length?g.moves:null;
+ }finally{g=previous;}
+}
+function unlockedCard(card){return !card.lock||g.keys.includes(card.lock)}function visibleFrom(col,j){let a=g.cols[col];if(j<0||j>=a.length)return false;let first=a[j];if(!unlockedCard(first))return false;if(first.kind==='category')return j===a.length-1;for(let k=j+1;k<a.length;k++)if(a[k].kind!=='word'||a[k].g!==first.g||!unlockedCard(a[k]))return false;return true}
+function selection(type,i,j){if(type==='cols'){if(!visibleFrom(i,j))return null;return{type,i,j}}if(type==='waste'&&g.waste.length)return{type};return null}
+function chosenCards(sel){return sel.type==='waste'?[topCard(g.waste)]:g.cols[sel.i].slice(sel.j)}
+function slotForGroup(group){return g.slotGroups.indexOf(group)}
+function valid(sel,dest){
+ if(!sel||sel.type==='cols'&&dest.type==='cols'&&sel.i===dest.i)return false;
+ let cards=chosenCards(sel),first=cards[0];if(!first||cards.some(card=>!unlockedCard(card)))return false;
+ if(dest.type==='found'){
+  if(dest.i<0||dest.i>=g.slotGroups.length)return false;
+  const group=g.slotGroups[dest.i];
+  if(first.kind==='category')return cards.length===1&&group===null&&!g.active[first.g]&&!g.completedGroups.includes(first.g);
+  return first.kind==='word'&&group===first.g&&cards.every(card=>card.kind==='word'&&card.g===group)&&g.found[dest.i].length+cards.length<=config().per;
+ }
+ if(dest.type==='cols'){
+  if(first.kind!=='word')return false;
+  let dst=topCard(g.cols[dest.i]);return !dst||dst.kind==='word'&&dst.g===first.g&&unlockedCard(dst);
+ }
+ return false;
+}
+function move(sel,dest){
+ if(!valid(sel,dest))return false;
+ if(g.moves>=moveLimit()){outOfMoves();return false}
+ snapshot();let cards=sel.type==='waste'?[g.waste.pop()]:g.cols[sel.i].splice(sel.j);
+ if(dest.type==='found'){
+  if(cards[0].kind==='category'){g.slotGroups[dest.i]=cards[0].g;g.active[cards[0].g]=true}
+  else {g.found[dest.i].push(...cards);if(g.found[dest.i].length===config().per){g.completedGroups.push(g.slotGroups[dest.i]);g.slotGroups[dest.i]=null;g.found[dest.i]=[];}}
+ }else g.cols[dest.i].push(...cards);
+ for(let card of cards)if(card.key&&!g.keys.includes(card.key))g.keys.push(card.key);
+ g.moves++;selected=null;render(cards[0].kind==='category'?'👑 '+cards[0].word+' auf freiem Ablagefeld geöffnet!':'✓ '+cards.length+' Karte(n) verschoben.');checkEnd();return true;
+}
+function tap(type,i,j){if(!g||g.completed)return;if(selected&&move(selected,{type,i}))return;if(type==='cols'||type==='waste'){let next=selection(type,i,j);if(next){selected=next;let cards=chosenCards(next);render(cards.length+' Karte(n) ausgewählt: '+cards[0].word+'. Tippe auf ein passendes Ziel.');return}}if(type==='found'){render(g.slotGroups[i]!==null?'Hier gehören Wörter aus „'+g.groups[g.slotGroups[i]]+'“ hin.':'Freies Ablagefeld: Ziehe eine beliebige goldene Kategorienkarte hierher.');return}selected=null;render('Ziehe eine Karte oder Kartengruppe auf einen freien Platz oder eine passende Karte.');}
+function checkEnd(){if(g.completedGroups.length===config().total){g.completed=true;let validWin=g.hintsUsed<=Math.max(2,config().hints-1);if(validWin){try{localStorage.setItem(PROGRESS+'_'+g.difficulty,String(Math.max(unlocked(g.difficulty),g.level+1)))}catch(e){}}save();dialog(validWin?'🏆 Level geschafft!':'Level abgeschlossen',validWin?'Der nächste Level ist freigeschaltet!':'Zu viele Hinweise für einen gewerteten Sieg.',[['Weiter',()=>{hide();create(validWin?g.level+1:g.level,g.difficulty)}],['Menü',()=>{hide();openMenu()}]]);return}if(g.moves>=moveLimit())outOfMoves()}
+function outOfMoves(){dialog('Keine Züge mehr','Das Zuglimit ist erreicht. Versuche eine andere Reihenfolge.',[['Erneut spielen',()=>{hide();create(g.level,g.difficulty)}],['Menü',()=>{hide();openMenu()}]])}function dialog(title,body,buttons){$('dialogTitle').textContent=title;$('dialogText').textContent=body;let area=$('dialogButtons');area.replaceChildren();buttons.forEach(([label,fn])=>{let b=document.createElement('button');b.textContent=label;b.addEventListener('click',fn);area.append(b)});$('dialog').classList.remove('hidden')}function hide(){$('dialog').classList.add('hidden')}
+function hint(){if(!g||g.completed)return;if(g.hintsUsed>=config().hints){msg('Keine Hinweise mehr.');return}let advice=null;if(g.waste.length&&topCard(g.waste).kind==='category'&&g.slotGroups.includes(null))advice='Ziehe die goldene Karte aus dem Nachziehstapel auf ein freies oberes Feld.';for(let i=0;i<g.cols.length&&!advice;i++){let a=g.cols[i];if(a.length&&topCard(a).kind==='category'&&g.slotGroups.includes(null)){advice='Ziehe die goldene Karte „'+topCard(a).word+'“ auf ein beliebiges freies oberes Ablagefeld.';break}}if(!advice){for(let i=0;i<g.cols.length&&!advice;i++){let a=g.cols[i];for(let j=a.length-1;j>=0;j--){if(visibleFrom(i,j)&&slotForGroup(a[j].g)!==-1&&g.found[slotForGroup(a[j].g)].length+a.length-j<=config().per){advice='Tippe auf „'+a[j].word+'“ und dann oben auf „'+g.groups[a[j].g]+'“.';break}}}}if(!advice)advice='Verschiebe eine passende Kartengruppe auf einen anderen Stapel.';snapshot();g.hintsUsed++;render('💡 '+advice)}
+function render(t){if(!g)return;let c=config();$('level').textContent='Level '+g.level;$('moves').textContent=moveLimit()-g.moves;$('hints').textContent=c.hints-g.hintsUsed;$('score').textContent=g.completedGroups.length+'/'+c.total;$('stockCount').textContent=g.stock.length||(g.reserve?.length?'＋':'↻');$('stock').disabled=!g.stock.length&&!g.waste.length&&!(g.reserve?.length);let waste=$('waste');waste.classList.toggle('hidden',!g.waste.length);waste.classList.toggle('selected',selected?.type==='waste');if(g.waste.length){let w=topCard(g.waste);waste.textContent=(w.lock&&!unlockedCard(w)?'🔒 '+w.lock+' · ':'')+(w.picture?w.emoji+' ':'')+w.word+(w.key?' 🔑'+w.key:'');}$('board').style.setProperty('--n',c.n);let out='';const maxStack=Math.max(1,...g.cols.map(a=>a.length));const available=Math.max(140,window.innerHeight-(document.querySelector('header').offsetHeight+document.querySelector('.toolbar').offsetHeight+document.querySelector('.footer').offsetHeight+(document.querySelector('.target')?.offsetHeight || 72)+70));const step=Math.max(9,Math.min(23,Math.floor((available-105)/Math.max(1,maxStack-1))));for(let i=0;i<c.n;i++){let a=g.cols[i],f=g.found[i],slotGroup=g.slotGroups[i];out+='<div class="column"><div class="target '+(slotGroup!==null?'active':'')+'" data-type="found" data-i="'+i+'">'+(slotGroup!==null?'<span class="cat">'+esc(g.groups[slotGroup])+'</span><span class="count">👑 '+f.length+'/'+c.per+'</span>':'♛<br>Frei')+'</div><div class="stack '+(!a.length?'empty':'')+'" data-type="cols" data-i="'+i+'">';for(let j=0;j<a.length;j++){let card=a[j],front=j===a.length-1||(j>=a.length-3&&a.slice(j).every(x=>x.g===card.g&&x.kind==='word'))||j>=a.length-2&&card.kind==='category',locked=front&&!unlockedCard(card),isSelected=selected?.type==='cols'&&selected.i===i&&j>=selected.j;out+='<div data-type="cols" data-i="'+i+'" data-j="'+j+'" class="card '+(!front?'back':card.kind==='category'?'category':locked?'locked':'')+' '+(isSelected?'selected':'')+'" style="top:'+(j*step)+'px;z-index:'+(j+1)+'">';if(!front)out+='◆<br>◆ ◆';else if(locked)out+='🔒<small>'+card.lock+' Schloss</small>';else if(card.kind==='category')out+='👑<br><span class="catword">'+esc(card.word)+'</span>';else out+=(card.picture?'<span class="emoji">'+card.emoji+'</span>':'')+esc(card.word)+(card.key?'<small>🔑 '+card.key+'</small>':'');out+='</div>'}out+='</div></div>'}$('board').innerHTML=out;document.querySelectorAll('.stack').forEach((el,i)=>{const n=g.cols[i].length;el.style.setProperty('--stack-height',Math.max(70,Math.min(112,window.innerWidth*.175)+Math.max(0,n-1)*step)+'px')});if(t)msg(t);save()}
+function openMenu(){$('welcome').classList.remove('hidden');$('continue').classList.toggle('hidden',!g||g.completed);updateProgress()}function updateProgress(){$('progress').textContent='Freigeschaltetes Level: '+unlocked($('difficulty').value)}
+$('board').addEventListener('click',e=>{if(Date.now()<suppressClickUntil)return;let p=e.target.closest('[data-type]');if(p)tap(p.dataset.type,Number(p.dataset.i),Number(p.dataset.j))});$('start').addEventListener('click',()=>{try{create(unlocked($('difficulty').value),$('difficulty').value);$('welcome').classList.add('hidden')}catch(e){$('progress').textContent='Startfehler: '+e.message;console.error(e)}});$('continue').addEventListener('click',()=>{$('welcome').classList.add('hidden');render('Weiter geht’s!')});$('menu').addEventListener('click',openMenu);$('difficulty').addEventListener('change',updateProgress);$('hint').addEventListener('click',hint);$('undo').addEventListener('click',()=>{if(!history.length){msg('Kein Zug zum Zurücknehmen.');return}let used=g.hintsUsed;g=JSON.parse(history.pop());g.hintsUsed=Math.max(used,g.hintsUsed);selected=null;render('↶ Zurückgenommen. Hinweise bleiben verbraucht.')});$('restart').addEventListener('click',()=>dialog('Neu starten?','Dein aktueller Fortschritt im Level wird zurückgesetzt.',[['Neustart',()=>{hide();create(g.level,g.difficulty)}],['Abbrechen',hide]]));$('stock').addEventListener('click',()=>{if(!g||g.completed)return;if(!g.stock.length){if(!g.waste.length&&!(g.reserve||[]).length)return;snapshot();if((g.reserve||[]).length){g.stock=g.reserve.splice(0).reverse();render('🃏 Weitere Karten freigegeben – ohne Zugkosten.')}else{g.stock=g.waste.reverse();g.waste=[];render('🔄 Nachziehstapel wieder aufgefüllt – ohne Zugkosten.')}selected=null;return}snapshot();g.waste.push(g.stock.pop());selected=null;render('Neue Karte gezogen – ohne Zugkosten.');});$('waste').addEventListener('click',()=>{if(Date.now()>=suppressClickUntil)tap('waste',0,0)});
+
+// Fingersteuerung (Pointer Events): eine Karte oder eine zusammenhängende Gruppe ziehen.
+let drag=null, suppressClickUntil=0;
+function dragSelection(el){
+  if(!g||g.completed)return null;
+  let type=el.dataset.type,i=Number(el.dataset.i),j=Number(el.dataset.j);
+  return selection(type,i,j);
+}
+function dragTarget(x,y){
+  const under=document.elementFromPoint(x,y);
+  if(!under)return null;
+  const p=under.closest('[data-type]');
+  if(!p)return null;
+  const type=p.dataset.type;
+  if(type!=='found'&&type!=='cols')return null;
+  return {type,i:Number(p.dataset.i),el:p};
+}
+function cleanDrag(){
+  document.querySelectorAll('.drag-source,.drag-hover').forEach(el=>el.classList.remove('drag-source','drag-hover'));
+  document.querySelector('.drag-ghost')?.remove();
+  drag=null;
+}
+function pointerDown(e){
+  if(e.button!==undefined&&e.button!==0)return;
+  const el=e.target.closest('.card[data-type="cols"],#waste[data-type="waste"]');
+  if(!el||!g||g.completed||!$('welcome').classList.contains('hidden'))return;
+  const sel=dragSelection(el);if(!sel)return;
+  drag={sel,el,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,started:false,hover:null,id:e.pointerId};
+  // Capture on the board/waste keeps touch moves working even outside the card.
+  // Kein Pointer-Capture auf iOS: Touch-Fallback verwaltet die Bewegung global.
+}
+function pointerMove(e){
+  if(!drag||drag.id!==e.pointerId)return;
+  const d=drag;d.x=e.clientX;d.y=e.clientY;
+  if(!d.started&&Math.hypot(d.x-d.startX,d.y-d.startY)<9)return;
+  if(!d.started){
+    d.started=true;d.el.classList.add('drag-source');
+    let cards=chosenCards(d.sel),ghost=document.createElement('div');
+    ghost.className='drag-ghost';ghost.style.setProperty('--ghost-width',Math.round(d.el.getBoundingClientRect().width)+'px');
+    const face=document.createElement('div');face.className='ghost-card';
+    face.textContent=(cards[0].kind==='category'?'👑 ':'')+(cards[0].picture?cards[0].emoji+' ':'')+cards[0].word;
+    if(cards.length>1){const badge=document.createElement('span');badge.className='ghost-count';badge.textContent=cards.length+' Karten';face.append(badge)}
+    ghost.append(face);document.body.append(ghost);d.ghost=ghost;
+  }
+  e.preventDefault();
+  d.ghost.style.left=d.x+'px';d.ghost.style.top=d.y+'px';
+  if(d.hover)d.hover.classList.remove('drag-hover');
+  const target=dragTarget(d.x,d.y);
+  d.hover=target&&valid(d.sel,target)?target.el:null;
+  if(d.hover)d.hover.classList.add('drag-hover');
+}
+function pointerUp(e){
+  if(!drag||drag.id!==e.pointerId)return;
+  const d=drag;
+  if(d.started){
+    suppressClickUntil=Date.now()+450;
+    const target=dragTarget(e.clientX,e.clientY);
+    const moved=target&&move(d.sel,target);
+    cleanDrag();
+    if(!moved)msg('Hier passt die Karte nicht. Versuche ein anderes Feld.');
+  }else cleanDrag();
+}
+$('board').addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')pointerDown(e)});
+$('waste').addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')pointerDown(e)});
+window.addEventListener('pointermove',e=>{if(e.pointerType!=='touch')pointerMove(e)},{passive:false});
+window.addEventListener('pointerup',e=>{if(e.pointerType!=='touch')pointerUp(e)});
+window.addEventListener('pointercancel',e=>{if(e.pointerType!=='touch')cleanDrag()});
+
+// iPhone/iPad: native Touch Events als zuverlässige Drag-Steuerung.
+// touch-action:none verhindert Scrollen beim Greifen einer Karte.
+let touchId=null;
+function touchPoint(list,id){for(const t of list)if(t.identifier===id)return t;return null}
+function onTouchStart(e){
+  if(drag||!e.changedTouches.length)return;
+  const t=e.changedTouches[0];
+  const el=e.target.closest('.card[data-type="cols"],#waste[data-type="waste"]');
+  if(!el||!g||g.completed||!$('welcome').classList.contains('hidden'))return;
+  const sel=dragSelection(el);if(!sel)return;
+  touchId=t.identifier;
+  drag={sel,el,startX:t.clientX,startY:t.clientY,x:t.clientX,y:t.clientY,started:false,hover:null,id:touchId};
+  e.preventDefault();
+}
+function onTouchMove(e){
+  if(touchId===null||!drag)return;
+  const t=touchPoint(e.changedTouches,touchId);if(!t)return;
+  e.preventDefault();
+  pointerMove({pointerId:touchId,clientX:t.clientX,clientY:t.clientY,preventDefault(){}});
+}
+function onTouchEnd(e){
+  if(touchId===null)return;
+  const t=touchPoint(e.changedTouches,touchId);if(!t)return;
+  e.preventDefault();
+  const wasDrag=!!drag?.started;const sel=drag?.sel;
+  pointerUp({pointerId:touchId,clientX:t.clientX,clientY:t.clientY});
+  touchId=null;
+  if(!wasDrag&&sel)tap(sel.type,sel.i,sel.j);
+}
+function onTouchCancel(){touchId=null;cleanDrag()}
+$('board').addEventListener('touchstart',onTouchStart,{passive:false});
+$('waste').addEventListener('touchstart',onTouchStart,{passive:false});
+window.addEventListener('touchmove',onTouchMove,{passive:false});
+window.addEventListener('touchend',onTouchEnd,{passive:false});
+window.addEventListener('touchcancel',onTouchCancel,{passive:false});
+
+try{let s=JSON.parse(localStorage.getItem(SAVE)||'null');if(s&&CFG[s.difficulty]&&Array.isArray(s.cols)&&s.cols.length===CFG[s.difficulty].n&&Array.isArray(s.slotGroups)&&s.slotGroups.length===CFG[s.difficulty].n&&Array.isArray(s.completedGroups)&&Array.isArray(s.found)){g=s;$('difficulty').value=g.difficulty;render('Willkommen zurück!')}}catch(e){console.warn('Spielstand konnte nicht geladen werden',e)}updateProgress();window.addEventListener('resize',()=>{if(g)render()});
+// Reparatur 9.5.1: alte Offline-Caches entfernen statt fehlerhafte Seiten zu speichern.
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.filter(r=>r.scope.includes('/solitaire-a-z/')).map(r=>r.unregister()))).catch(()=>{});}
+if('caches' in window){caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('solitaire-az-')).map(k=>caches.delete(k)))).catch(()=>{});}
+</script></body></html>
