@@ -1,0 +1,2 @@
+// Version 4: alter Service-Worker-Cache wird beim Spielstart deaktiviert.
+self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(self.registration.unregister()));
