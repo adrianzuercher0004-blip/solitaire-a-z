@@ -1,0 +1,13 @@
+SOLITAIRE A-Z – iPHONE-ANLEITUNG
+
+1. Entpacke die ZIP-Datei auf einem Computer.
+2. Öffne https://app.netlify.com/drop in einem Browser.
+3. Ziehe den entpackten Ordner solitaire-a-z auf die Seite.
+4. Netlify erstellt eine HTTPS-Webadresse für dein Spiel.
+5. Öffne diese Adresse auf deinem iPhone in Safari.
+6. Tippe in Safari auf Teilen und dann auf Zum Home-Bildschirm.
+7. Starte das Spiel einmal bei bestehender Internetverbindung. Danach können die geladenen Spieldateien offline verfügbar sein.
+
+WICHTIG: Die Netlify-Adresse ist grundsätzlich über den Link erreichbar. Sie ist nicht durch ein Passwort geschützt. Einladungslinks, echte Gruppenfunktionen und Ranglisten gibt es in dieser Version noch nicht.
+
+Keine Werbung, keine echten Käufe. Punkte und Fortschritt bleiben auf dem jeweiligen Gerät.
