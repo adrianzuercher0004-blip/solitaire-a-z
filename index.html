@@ -1,0 +1,558 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#087a3e"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><title>Solitaire A-Z · Version 9.8.4</title><style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(155deg,#008044,#087039 75%,#0c9a54);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100dvh}button,select{font:inherit}button{touch-action:manipulation;cursor:pointer}header{max-width:850px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:19px 15px 8px}header strong{font-size:23px}header button{border:0;background:transparent;color:white;font-size:27px}.toolbar{max-width:850px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 15px 17px;gap:9px}.flag{background:linear-gradient(#29d17d,#0baf64);color:#045532;border-radius:7px 7px 15px 15px;padding:9px 17px;text-align:center;box-shadow:0 3px 0 #076637;font-weight:750}.flag strong{font-size:26px;display:block}.stats{text-align:center;font-size:12px}.stats b{display:block;font-size:20px}.stock{width:78px;height:105px;border:5px solid white;border-radius:13px;background:repeating-linear-gradient(45deg,#2394ff 0 12px,#4bafff 12px 24px);box-shadow:0 4px 0 #004d2d;position:relative;color:#08385b;font-weight:800}.stock span{position:absolute;right:-7px;top:-10px;border-radius:0 8px 0 9px;background:white;padding:2px 9px}.stock:disabled{opacity:.45}.board{max-width:850px;margin:10px auto 0;padding:0 9px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:7px}.column{min-width:0}.target{height:92px;border:2px dashed #5dc68f;border-radius:12px;background:#005a2e80;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:12px;color:#b6e8cc;text-align:center;font-size:12px}.target.active{background:#fffdf8;color:#624632;border:3px solid #e4a51d}.target .cat{position:absolute;top:-13px;left:0;right:0;background:#eeb83d;color:#59400c;border-radius:5px 5px 0 0;font-weight:800;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:clamp(10px,2.7vw,14px)}.target .count{font-weight:800;font-size:20px}.stack{height:clamp(340px,105vw,550px);position:relative;border-radius:10px;background:#005e3333;border:1px solid #ffffff15}.card{position:absolute;left:0;width:100%;height:clamp(104px,29vw,150px);border:3px solid #fff;border-radius:12px;background:#fffdfa;color:#60432f;box-shadow:0 4px 2px #004e3055;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden;padding:4px;font-size:clamp(12px,3.3vw,20px);font-weight:750;overflow-wrap:anywhere}.card .emoji{font-size:clamp(20px,5.5vw,35px)}.card.back{background:repeating-linear-gradient(45deg,#168bf0 0 13px,#53aeff 13px 26px);color:#c9eaff}.card.category{border-color:#ffcf4e;color:#61451b;background:#fffaf0}.card.selected{outline:4px solid #ffe03d;z-index:100!important}.card small{font-size:10px}.card.locked{background:#ddd6c9}.waste{max-width:850px;margin:0 auto 10px;width:120px;min-height:76px;background:#fffdf8;color:#63422b;border:3px solid #e4b63b;border-radius:12px;text-align:center;padding:10px;font-weight:800}.waste.selected{outline:4px solid #ffe03d}.footer{max-width:850px;margin:10px auto;padding:0 15px 30px}.message{border-radius:12px;background:#006337;padding:15px;text-align:center;min-height:66px;font-weight:650;line-height:1.4}.actions{display:flex;gap:7px;margin-top:12px}.actions button{flex:1;border:0;background:#fff4d8;color:#5e432c;border-radius:10px;padding:13px 3px;font-weight:800;font-size:clamp(11px,3vw,15px)}.overlay{position:fixed;inset:0;background:#002e20e9;display:flex;justify-content:center;align-items:center;padding:16px;z-index:200}.hidden{display:none!important}.modal{background:#fffcf3;color:#4c3a2d;border-radius:20px;padding:23px;width:min(410px,100%);text-align:center;max-height:90dvh;overflow:auto}.modal h2{color:#7544a0}.modal button,.modal select{width:100%;border:0;border-radius:10px;padding:14px;margin:8px 0}.modal button{background:#7838a2;color:white;font-weight:800}.modal select{background:#efe2f6}.sub{font-size:13px;color:#6c615b}.logo{font-size:65px}.pill{background:#eee5d6;border-radius:10px;padding:10px;font-size:13px} @media(min-width:650px){.card{font-size:18px}}
+
+/* V9: kompakter Spieltisch und Fingersteuerung */
+html,body{overscroll-behavior-y:contain}body{background:radial-gradient(ellipse at 50% 35%,#068c49 0%,#007a3d 65%,#006934 100%)}
+header{padding:13px 12px 5px}header strong{font-size:20px}.toolbar{padding:7px 12px 13px}
+.board{gap:5px;padding:0 8px}.target{height:86px;margin-bottom:8px;border-color:#147d4b;background:#005f3480}
+.stack{height:clamp(520px,150vw,900px);background:transparent;border:0;touch-action:none}.stack.empty{border:2px dashed #9ddab888;border-radius:12px;background:#004b2b44;min-height:140px}.stack.empty::before{content:"＋ Freier Platz";position:absolute;top:35px;left:0;right:0;text-align:center;color:#d6f5df;font-size:clamp(9px,2.5vw,14px);pointer-events:none}
+.card{height:clamp(106px,30vw,156px);border:3px solid #f5f2e9;border-radius:12px;background:#fffdfa;box-shadow:0 3px 2px #003d2455;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.card.back{background:repeating-linear-gradient(45deg,#1785ed 0 14px,#4cafff 14px 28px);color:#d0eaff;border-color:#f8f7ef}
+.card.category{background:#fffdf7;border:4px solid #ffc43c;color:#63492b}
+.card.selected{outline:3px solid #ffec54}.card.drag-source{opacity:.34}
+.card.drag-hover,.target.drag-hover{outline:4px solid #ffe85c;outline-offset:1px}
+.drag-ghost{position:fixed;z-index:1000;pointer-events:none;transform:translate(-50%,-38%);width:var(--ghost-width,100px);filter:drop-shadow(0 12px 10px #002b1a88);touch-action:none}
+.drag-ghost .ghost-card{position:relative;min-height:100px;background:#fffdf8;color:#684630;border:4px solid #ffe084;border-radius:12px;text-align:center;padding:16px 4px 9px;font-size:clamp(13px,4vw,20px);font-weight:800}
+.drag-ghost .ghost-count{position:absolute;right:3px;top:3px;background:#d7a21c;color:white;border-radius:20px;padding:2px 7px;font-size:11px}
+.footer{margin-top:0}.message{min-height:56px;padding:12px;font-size:14px}.waste{touch-action:none;user-select:none;-webkit-user-select:none}
+@media(max-width:420px){.card{font-size:clamp(11px,3.5vw,17px)}.target{height:76px}.target .count{font-size:16px}.flag{padding:8px 12px}}
+
+.brand{display:flex;align-items:center;gap:6px}.brand-icon{font-size:29px;line-height:1}.card.category{font-size:clamp(9px,2.5vw,15px)!important;overflow-wrap:normal;hyphens:auto}.card.category .catword{display:block;max-width:100%;overflow-wrap:break-word;hyphens:auto}.stack:empty{outline:2px dashed #75c89a;outline-offset:-3px;background:#075f3880}.stack:empty::after{content:"+ Freier Platz";position:absolute;top:28px;left:0;right:0;text-align:center;color:#d3f3df;font-size:11px;pointer-events:none}.target{font-size:clamp(9px,2vw,12px)}
+.target:not(.active){border-color:#70dca3;background:#005a2f88}.target:not(.active).drag-hover{background:#168d51;outline:4px solid #ffe85c}
+/* 9.6.1: iPhone-kompakt, alle Bedienelemente sichtbar */
+html,body{height:100%;min-height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+header{width:100%;flex:0 0 auto;padding:5px 11px 2px;min-height:38px}
+header strong{font-size:clamp(14px,4vw,19px)}
+.brand-logo{width:32px;height:32px;border-radius:8px;object-fit:cover;border:1px solid #f8d87d}
+.toolbar{width:100%;flex:0 0 auto;padding:4px 10px 7px;gap:6px}
+.flag{padding:4px 9px}.flag strong{font-size:20px}.stats{font-size:10px}.stats b{font-size:17px}
+.stock{width:clamp(49px,13vw,65px);height:clamp(64px,17vw,82px);border-width:3px;border-radius:9px;flex-shrink:0}
+.stock span{font-size:14px}
+.board{width:100%;flex:1 1 auto;min-height:0;margin:0 auto;padding:0 6px;gap:4px;align-items:stretch}
+.column{display:flex;flex-direction:column;min-height:0}
+.target{height:clamp(48px,11vh,72px);flex:0 0 auto;margin-bottom:5px;border-radius:9px}
+.target .cat{top:-9px;font-size:clamp(8px,2.1vw,12px)}.target .count{font-size:clamp(10px,3vw,16px)}
+.stack{height:auto!important;flex:1 1 auto;min-height:0!important;overflow:visible}
+.card{height:clamp(65px,18vw,118px);border-width:2px;border-radius:9px;font-size:clamp(9px,2.5vw,15px)}
+.card.category{border-width:3px;font-size:clamp(9px,2.2vw,14px)!important}
+.card .emoji{font-size:clamp(14px,4vw,25px)}
+.footer{flex:0 0 auto;width:100%;margin:0 auto;padding:5px 10px 5px}
+.message{padding:6px 9px;min-height:32px;font-size:clamp(10px,2.7vw,13px)}
+.actions{margin-top:5px;gap:5px}.actions button{padding:9px 2px;font-size:clamp(10px,2.8vw,14px)}
+.footer .sub{font-size:10px;margin:6px 0 0}
+.waste{position:absolute;right:13px;top:calc(env(safe-area-inset-top) + 119px);z-index:40;max-width:75px;min-height:48px;font-size:11px;padding:4px;border-width:2px}
+@media(max-height:730px){.target{height:48px}.card{height:clamp(58px,16vw,90px)}.message{min-height:26px;padding:4px}.actions button{padding:7px 2px}.footer .sub{display:none}}
+
+/* V9.7.1: responsive, kompakte Stapel und Nachziehkarte neben dem Stapel */
+.toolbar{justify-content:space-between}
+.draw-area{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.draw-area .stock,.draw-area .waste{position:relative!important;top:auto!important;right:auto!important;left:auto!important;margin:0!important;width:clamp(45px,12vw,64px)!important;height:clamp(62px,16vw,82px)!important;min-height:0!important;max-width:none!important;flex:0 0 auto;border-radius:9px;font-size:clamp(9px,2.4vw,13px);overflow-wrap:anywhere;display:flex;align-items:center;justify-content:center;padding:3px;line-height:1.1}
+.draw-area .waste.hidden{display:none!important}
+.board{flex:0 1 auto!important;min-height:0!important;align-items:start!important}
+.column{min-height:0!important}
+.stack{flex:0 0 auto!important;min-height:clamp(68px,18vw,112px)!important;height:var(--stack-height,100px)!important;overflow:visible!important}
+.stack.empty{height:clamp(68px,18vw,112px)!important;min-height:0!important}
+.stack.empty::before,.stack:empty::after{content:none!important}
+.stack.empty::after{content:'＋'!important;position:absolute;top:15px;left:0;right:0;text-align:center;color:#c4ebd6;font-size:18px;pointer-events:none}
+.card{height:clamp(66px,18vw,116px)}
+.footer{margin-top:auto!important}
+@media(max-width:420px){.brand-logo{width:30px;height:30px}.brand{font-size:16px!important}.toolbar{gap:3px}.stats{font-size:9px}.flag{padding:3px 5px}.flag strong{font-size:18px}}
+
+/* V9.7.2: keine automatischen vertikalen Ränder; alle Karten im sichtbaren Bereich */
+html,body{height:100%;height:100dvh;min-height:0;overflow:hidden}
+body{display:flex;flex-direction:column;justify-content:flex-start}
+header,.toolbar,.board,.footer{margin:0 auto!important;max-width:850px;width:100%}
+header{flex:0 0 auto;padding:4px 9px 2px;min-height:34px}
+.toolbar{flex:0 0 auto;padding:4px 8px 8px}
+.board{flex:1 1 auto!important;min-height:0!important;align-items:stretch!important;padding:0 5px;gap:4px}
+.column{min-height:0;overflow:visible}
+.target{height:clamp(49px,9dvh,67px);margin-bottom:6px}
+.stack{height:var(--stack-height,150px)!important;min-height:0!important;flex:0 0 auto!important}
+.stack.empty{height:clamp(68px,18vw,112px)!important}
+.card{height:clamp(64px,17.5vw,112px);font-size:clamp(10px,2.55vw,15px);overflow-wrap:normal;word-break:normal;hyphens:auto}
+.card.category{font-size:clamp(9px,2.4vw,14px)!important}
+.footer{flex:0 0 auto!important;margin-top:0!important;padding:3px 8px calc(4px + env(safe-area-inset-bottom))}
+.message{min-height:26px;padding:5px 7px;font-size:12px}
+.actions{margin-top:4px}.actions button{padding:7px 2px}
+.footer .sub{margin:4px 0 0}
+.draw-area{flex-direction:row-reverse} /* aufgedeckte Karte links vom blauen Stapel */
+.draw-area .waste{overflow:hidden;overflow-wrap:normal;word-break:normal;hyphens:auto;font-size:clamp(9px,2.2vw,13px)}
+@media(max-height:730px){.footer .sub{display:none}.target{height:46px}.card{height:clamp(60px,16vw,95px)}}
+
+/* Endlose Landschaftskarte, bewusst getrennt vom kompakten Spielbrett */
+.map-modal{width:min(96vw,620px)!important;max-width:620px!important;max-height:94dvh;display:flex;flex-direction:column;padding:10px!important;gap:8px}
+.map-top,.map-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.map-top strong{font-size:14px;text-align:center}.map-small{font-size:12px!important;padding:8px!important;min-width:70px}
+.map-landscape{height:min(66dvh,590px);min-height:300px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(#aee9fc 0%,#e9f7d1 42%,#80c98a 100%);isolation:isolate}
+.map-landscape.forest{background:linear-gradient(#a5dbbb,#3c9368 65%,#215e46)}.map-landscape.mountain{background:linear-gradient(#9ed7f3,#b7d5e0 45%,#628aa1)}.map-landscape.magic{background:linear-gradient(#211a57,#63419b 60%,#a875bd)}
+.map-scenery{position:absolute;inset:0;pointer-events:none}.map-scenery .sun{position:absolute;right:12%;top:8%;font-size:52px}.map-scenery .hill{position:absolute;bottom:-15%;width:110%;height:48%;left:-5%;border-radius:50% 50% 0 0;background:#73bd83;opacity:.8}.map-landscape.forest .hill{background:#1b704c}.map-landscape.mountain .hill{background:#5b879d}.map-landscape.magic .hill{background:#6746a1}
+.map-scenery .decor{position:absolute;font-size:clamp(22px,7vw,40px);filter:drop-shadow(0 2px 2px #0003)}
+.map-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.map-node{position:absolute;transform:translate(-50%,-50%);border:3px solid white;border-radius:50%;width:48px;height:48px;padding:0!important;display:flex;align-items:center;justify-content:center;font-size:15px!important;font-weight:900;box-shadow:0 3px 9px #0004;background:#d4d9d9;color:#52606b;z-index:2;min-width:0!important}
+.map-node.done{background:#2c995b;color:white}.map-node.now{background:#ffd65b;color:#614308;animation:mapPulse 2s infinite}.map-node.locked{background:#cdd4d9;color:#5b6770}.map-node small{position:absolute;top:45px;font-size:10px;white-space:nowrap;color:white;text-shadow:0 1px 4px #222,0 1px 4px #222}.map-node.done small{color:#ffe45c}
+.map-bottom{font-size:12px}.map-bottom button{font-size:13px!important;padding:9px!important}@keyframes mapPulse{50%{box-shadow:0 0 0 7px #ffdc6c77}}
+@media(max-height:650px){.map-landscape{height:55dvh;min-height:240px}.map-node{width:40px;height:40px}}
+
+/* Version 9.8.4: runde Levelpunkte ohne Balken, Schlosslandschaft als Bild */
+.map-landscape.magic{background:#30235f url("schlosswelt.jpg") center center / 100% 100% no-repeat}
+.map-landscape.magic .map-scenery{display:none}
+.map-node{width:clamp(38px,11vw,55px);height:clamp(38px,11vw,55px);border:3px solid #fff7d9;border-radius:50%!important;box-shadow:0 4px 12px #0007;transition:transform .15s,box-shadow .15s;line-height:1}
+.map-node.done{background:radial-gradient(circle at 35% 25%,#f6ffdf,#93d88e 72%,#3a965a);color:#214b28;border-color:#f8db76}
+.map-node.now{background:radial-gradient(circle at 35% 25%,#fff8be,#ffd34d 70%,#d18b08);color:#593907;border-color:#fff4ab;box-shadow:0 0 0 5px #ffdc5c66,0 3px 13px #0006}
+.map-node.locked{background:radial-gradient(circle at 35% 25%,#f2f4f6,#b8c3cc);border-color:#dce4ec;color:#4a5660}
+.map-node small{top:calc(100% + 5px);font-size:clamp(10px,2.6vw,13px);font-weight:900;filter:drop-shadow(0 2px 2px #111)}
+.map-node:active{transform:translate(-50%,-50%) scale(.94)}
+.map-landscape{border:2px solid #ffffff90}
+@media(max-width:390px){.map-top{gap:3px}.map-small{min-width:0!important;padding:7px 5px!important;font-size:11px!important}.map-top strong{font-size:12px}}
+ 
+/* 9.7.8: Berührungsziele, visuelles Feedback, reduzierte Bewegung */
+.target.valid-drop,.stack.valid-drop{outline:3px solid #f8dc62;outline-offset:-3px;box-shadow:0 0 0 3px #fff8b5aa,0 0 16px #ffed8caa}
+.card:not(.back){touch-action:none}.card.selected{filter:drop-shadow(0 0 8px #ffde5b);outline:2px solid #ffe05c}
+#soundToggle{font-size:13px;padding:8px 12px;background:#eee1f7;color:#633081;border-radius:12px}
+.victory-burst{font-size:30px;letter-spacing:7px;animation:celebrate .7s ease-out both}
+@keyframes celebrate{from{opacity:0;transform:translateY(12px) scale(.7)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* 9.8.1: vier Landschaftswelten, alle Level als Kreise (niemals Balken) */
+#mapLandscape.map-landscape{position:relative;overflow:hidden;background-position:center;background-size:100% 100%;background-repeat:no-repeat}
+#mapLandscape.flower{background-image:url("blumenwelt.svg")}
+#mapLandscape.forest{background-image:url("zauberwald.svg")}
+#mapLandscape.mountain{background-image:url("bergwelt.svg")}
+#mapLandscape.magic{background-image:url("schlosswelt.jpg")}
+#mapLandscape .map-scenery{display:none}
+#mapLandscape .map-path{opacity:.10}
+#mapLandscape button.map-node{
+ appearance:none;-webkit-appearance:none;box-sizing:border-box;
+ position:absolute;display:flex;align-items:center;justify-content:center;
+ width:clamp(38px,11vw,54px)!important;height:clamp(38px,11vw,54px)!important;
+ min-width:0!important;max-width:54px!important;min-height:0!important;
+ padding:0!important;margin:0!important;
+ border:3px solid #e9eef2!important;border-radius:999px!important;
+ transform:translate(-50%,-50%);font-size:15px!important;line-height:1!important;
+ font-weight:900;box-shadow:0 3px 8px #10101880;z-index:5;
+ background:radial-gradient(circle at 32% 22%,#f7f9fc,#b8c4ce 80%)!important;
+ color:#4b5360!important;
+}
+#mapLandscape button.map-node.done{
+ background:radial-gradient(circle at 32% 22%,#f8ffe9,#8dd387 75%,#348e52)!important;
+ border-color:#eac45e!important;color:#234b2c!important
+}
+#mapLandscape button.map-node.now{
+ background:radial-gradient(circle at 32% 22%,#fffac5,#ffd248 70%,#ce900a)!important;
+ border-color:#fff0a0!important;color:#5c3e07!important;
+ box-shadow:0 0 0 5px #ffdf6b66,0 3px 9px #1b153688
+}
+#mapLandscape button.map-node.locked{opacity:.96}
+#mapLandscape button.map-node small{
+ position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);
+ white-space:nowrap;font-size:clamp(10px,2.5vw,13px)!important;color:#fff4a4;
+ text-shadow:0 1px 3px #000,0 2px 6px #000;pointer-events:none
+}
+#mapLandscape button.map-node.done small{color:#ffe37c}
+#mapLandscape button.map-node:active{transform:translate(-50%,-50%) scale(.95)}
+
+/* 9.8.1: echte kreisförmige Level-Medaillons, unabhängig von .modal button */
+#mapLandscape.map-landscape{background-size:cover!important;background-position:center!important}
+#mapLandscape.magic{background-image:url("schlosswelt.svg")!important}
+#mapLandscape .map-path{opacity:.85;z-index:1}
+#mapLandscape .map-node[role="button"]{
+  position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  box-sizing:border-box!important;width:48px!important;height:48px!important;
+  min-width:48px!important;max-width:48px!important;min-height:48px!important;max-height:48px!important;
+  padding:0!important;margin:0!important;border-radius:50%!important;
+  transform:translate(-50%,-50%)!important;z-index:5;
+  border:3px solid #f3f5f9!important;background:radial-gradient(circle at 30% 25%,#f5f7fb,#bfc8d4 80%)!important;
+  color:#4d5965!important;cursor:pointer;font-weight:900;font-size:16px;line-height:1;
+  box-shadow:0 3px 9px #1712288c!important;user-select:none;-webkit-user-select:none
+}
+#mapLandscape .map-node.done[role="button"]{background:radial-gradient(circle at 30% 25%,#eaffd8,#85c987 76%,#3e8b53)!important;border-color:#f1d174!important;color:#225431!important}
+#mapLandscape .map-node.now[role="button"]{background:radial-gradient(circle at 30% 25%,#fff9b5,#ffcd3f 78%,#c58b13)!important;border-color:#fff1a5!important;color:#593d12!important;box-shadow:0 0 0 5px #ffd64e6b,0 3px 12px #1b12378c!important}
+#mapLandscape .map-node.locked[role="button"]{filter:none}
+#mapLandscape .map-node[role="button"]:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#mapLandscape .map-node small{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);font-size:11px!important;color:#fff0ad;text-shadow:0 1px 4px #000,0 2px 5px #000;white-space:nowrap}
+#mapLandscape .map-node.locked small{display:none}
+@media(max-width:375px){#mapLandscape .map-node[role="button"]{width:42px!important;height:42px!important;min-width:42px!important;max-width:42px!important;min-height:42px!important;max-height:42px!important}}
+
+/* 9.8.3: Landschaften direkt in die Seite eingebettet, offline und ohne externe Bildpfade */
+#mapLandscape.map-landscape{background:#2c2357!important;isolation:isolate}
+#mapLandscape .world-art{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#mapLandscape .world-art>svg{display:block;width:100%;height:100%;preserveAspectRatio:xMidYMid slice}
+#mapLandscape .map-path{z-index:1;opacity:.9}
+#mapLandscape .map-node[role="button"]{z-index:3}
+#mapLandscape .map-node[role="button"][aria-current="step"]{animation:mapPulse 2.5s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){#mapLandscape .map-node[role="button"][aria-current="step"]{animation:none}}
+/* Erfolge */
+#achievementsOverlay .modal{max-height:86dvh;overflow:auto;text-align:left}
+.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.achievement{background:#f2ebf8;border-radius:14px;padding:12px 9px;color:#4b315f;font-size:13px}
+.achievement strong{display:block;font-size:14px;margin-bottom:4px}
+.achievement.locked{filter:grayscale(.8);opacity:.65}
+.achievement .medal{font-size:29px;display:block;margin-bottom:4px}
+</style></head><body><header><strong class="brand"><img class="brand-logo" src="icon-180.png" alt="Blumen A–Z"> Solitaire A-Z</strong><strong id="level">Level 1</strong><button id="menu" aria-label="Menü">☰</button></header><div class="toolbar"><div class="flag">Züge<strong id="moves">50</strong></div><div class="stats">Kategorien<b id="score">0/5</b></div><div class="stats">💡 Hinweise<b id="hints">3</b></div><div class="draw-area"><button class="stock" id="stock" aria-label="Karte ziehen"><span id="stockCount">0</span></button><div id="waste" class="waste hidden" data-type="waste"></div></div></div><main class="board" id="board"></main><div class="footer"><div class="message" id="message" aria-live="polite">Ziehe eine Karte oder Gruppe auf ein passendes Feld.</div><div class="actions"><button id="hint">💡 Hinweis</button><button id="undo">↶ Zurück</button><button id="restart">⟳ Neustart</button></div><p class="sub" style="color:#d5f7e3;text-align:center">Version 9.8.4 · Eigenständiges Solitaire A-Z · Ohne Werbung</p></div><div class="overlay" id="welcome"><div class="modal"><div class="logo"><img src="icon-180.png" alt="Solitaire A-Z Blumenlogo" style="width:100px;height:100px;border-radius:22px"></div><h2>Solitaire A-Z</h2><p>Verbinde passende Wörter, verschiebe ganze Kartengruppen und schalte Kategorien frei.</p><select id="difficulty"><option value="easy">🌱 Einfach · 3 Stapel</option><option value="medium">⭐ Mittel · 4 Stapel</option><option value="hard">🔥 Schwer · 5 Stapel</option><option value="expert">👑 Experte · 6 Stapel</option></select><div class="pill" id="progress"></div><button id="soundToggle" type="button" aria-label="Ton umschalten">🔇 Ton einschalten</button><button id="mapOpen">🗺️ Landschaftskarte</button><button id="achievementsOpen">🏅 Erfolge & Sammelalbum</button><button id="start">▶ Aktuelles Level spielen</button><button id="continue" class="hidden">▶ Fortsetzen</button><p class="sub">Ziehe Karten und ganze Gruppen mit dem Finger. 🔒 braucht einen passenden Schlüssel; 🧊 taut nach der vorherigen Kategorie; ⛓️ öffnet sich nach der angegebenen Kategorie. Ein Verschieben kostet einen Zug.</p></div></div><div class="overlay hidden" id="mapOverlay"><div class="modal map-modal"><div class="map-top"><button id="mapBack" class="map-small">← Zurück</button><button id="mapPrev" class="map-small">◀ 10</button><strong id="mapTitle">Levelreise</strong><button id="mapNext" class="map-small">Weiter →</button></div><div id="mapLandscape" class="map-landscape"></div><div class="map-bottom"><span id="mapInfo"></span><button id="mapPlay">▶ Spielen</button></div></div></div><div class="overlay hidden" id="achievementsOverlay"><div class="modal"><h2>🏅 Dein Sammelalbum</h2><p id="achievementsSummary"></p><div class="achievement-grid" id="achievementGrid"></div><button id="achievementsBack">← Zurück</button></div></div><div class="overlay hidden" id="dialog"><div class="modal"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div id="dialogButtons"></div></div></div><script>
+window.addEventListener('error',function(e){var p=document.getElementById('progress');if(p)p.textContent='Fehler beim Laden: '+(e.message||'Unbekannt')});
+'use strict';
+const DATA=[['Obst',[['Apfel','🍎'],['Birne','🍐'],['Banane','🍌'],['Kirsche','🍒'],['Orange','🍊'],['Erdbeere','🍓'],['Trauben','🍇']]],['Haustiere',[['Hund','🐶'],['Katze','🐱'],['Hamster','🐹'],['Hase','🐰'],['Papagei','🦜'],['Goldfisch','🐠'],['Meerschweinchen','🐹']]],['Blumen',[['Rose','🌹'],['Tulpe','🌷'],['Sonnenblume','🌻'],['Lilie','💮'],['Orchidee','🌺'],['Lavendel','🪻'],['Nelke','🌸']]],['Fahrzeuge',[['Auto','🚗'],['Bus','🚌'],['Zug','🚆'],['Fahrrad','🚲'],['Traktor','🚜'],['Motorrad','🏍️'],['Flugzeug','✈️']]],['Essen',[['Pizza','🍕'],['Burger','🍔'],['Brot','🍞'],['Käse','🧀'],['Suppe','🥣'],['Nudeln','🍝'],['Reis','🍚']]],['Wetter',[['Sonne','☀️'],['Regen','🌧️'],['Schnee','❄️'],['Wolke','☁️'],['Gewitter','⛈️'],['Nebel','🌫️'],['Wind','💨']]],['Sport',[['Fussball','⚽'],['Tennis','🎾'],['Basketball','🏀'],['Golf','⛳'],['Schwimmen','🏊'],['Skifahren','⛷️'],['Radfahren','🚴']]],['Getränke',[['Wasser','💧'],['Kaffee','☕'],['Tee','🍵'],['Saft','🧃'],['Milch','🥛'],['Limonade','🥤'],['Kakao','☕']]],['Kleidung',[['Hemd','👕'],['Hose','👖'],['Jacke','🧥'],['Schuh','👟'],['Mütze','🧢'],['Kleid','👗'],['Socken','🧦']]],['Natur',[['Baum','🌳'],['Berg','⛰️'],['Pilz','🍄'],['Blatt','🍁'],['Fluss','🏞️'],['Wald','🌲'],['Stein','🪨']]],['Musik',[['Gitarre','🎸'],['Klavier','🎹'],['Trommel','🥁'],['Geige','🎻'],['Flöte','🪈'],['Trompete','🎺'],['Harfe','🪉']]],['Berufe',[['Arzt','🩺'],['Koch','👨‍🍳'],['Pilot','👨‍✈️'],['Lehrer','👩‍🏫'],['Bäcker','🥖'],['Gärtner','🪴'],['Maler','🎨']]]];
+const CFG={easy:{n:3,total:5,per:6,limit:50,hints:3},medium:{n:4,total:7,per:7,limit:75,hints:4},hard:{n:5,total:9,per:7,limit:100,hints:5},expert:{n:6,total:12,per:7,limit:130,hints:6}};
+const $=id=>document.getElementById(id),SAVE='solitaireAZ_v976',PROGRESS='solitaireAZ_v7_unlocked';let g=null,selected=null,history=[];
+function rng(seed){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}function shuffle(a,r){for(let i=a.length-1;i>0;i--){let j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}function topCard(a){return a[a.length-1]}function config(){return CFG[g.difficulty]}function moveLimit(){return g?.limit||config().limit}function unlocked(d){try{return Number(localStorage.getItem(PROGRESS+'_'+d))||1}catch(e){return 1}}function starKey(d,l){return 'solitaireAZ_stars_'+d+'_'+l}function stars(d,l){try{return Number(localStorage.getItem(starKey(d,l)))||0}catch(e){return 0}}function storeStars(d,l,n){try{localStorage.setItem(starKey(d,l),String(Math.max(stars(d,l),n)))}catch(e){}}
+const WORLDS={easy:{name:'🌷 Blumenwelt',cls:'flower',icons:['🌸','🌷','🦋','🌼','🌻','🐝'],sun:'☀️'},medium:{name:'🌲 Zauberwald',cls:'forest',icons:['🌲','🍄','🦉','🌳','🦊','🌿'],sun:'🌤️'},hard:{name:'🏔️ Bergwelt',cls:'mountain',icons:['🏔️','⛰️','🌲','🦅','❄️','🏕️'],sun:'☀️'},expert:{name:'🏰 Schlosswelt',cls:'magic',icons:['🏰','✨','🔮','🦄','🌙','⭐'],sun:'🌙'}};
+const INLINE_WORLDS={"easy":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 740 1130\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"sky\" x2=\"0\" y2=\"1\"><stop stop-color=\"#bce9f8\"/><stop offset=\"1\" stop-color=\"#f4edb5\"/></linearGradient></defs><rect width=\"740\" height=\"1130\" fill=\"url(#sky)\"/><path d=\"M0 390Q120 350 230 400T480 380T740 370V1130H0Z\" fill=\"#65b886\"/><path d=\"M0 700Q180 640 360 720T740 650V1130H0Z\" fill=\"#4b996e\" opacity=\".72\"/><circle cx=\"605\" cy=\"145\" r=\"61\" fill=\"#ffe59c\" opacity=\".95\"/><ellipse cx=\"100\" cy=\"400\" rx=\"240\" ry=\"110\" fill=\"#87ca93\" opacity=\".8\"/><ellipse cx=\"460\" cy=\"480\" rx=\"230\" ry=\"110\" fill=\"#87ca93\" opacity=\".8\"/><ellipse cx=\"700\" cy=\"430\" rx=\"220\" ry=\"110\" fill=\"#87ca93\" opacity=\".8\"/><ellipse cx=\"250\" cy=\"730\" rx=\"320\" ry=\"110\" fill=\"#87ca93\" opacity=\".8\"/><g transform=\"translate(153 844)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#e685d6\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(426 811)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#fa8fb9\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(644 1003)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#ef677e\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(87 335)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#ef677e\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(695 543)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ffd95e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(325 496)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#fa8fb9\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(679 440)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(229 481)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#f5f2fd\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(213 913)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#ef677e\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(533 981)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#f5f2fd\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(321 937)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#f5f2fd\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(370 1091)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#e685d6\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(610 713)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#e685d6\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(33 318)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ef677e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(132 1108)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#ef677e\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(585 1021)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#fa8fb9\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(471 394)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#f5f2fd\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(98 894)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(665 897)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#fa8fb9\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(300 313)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(467 722)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#f5f2fd\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(661 513)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ffd95e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(616 968)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ffd95e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(233 821)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#fa8fb9\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(612 1049)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#f5f2fd\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(658 337)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(314 976)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#e685d6\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(685 635)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ef677e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(464 991)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ffd95e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(315 676)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(563 535)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(198 419)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#e685d6\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(685 871)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ffd95e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(115 717)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(609 327)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#ef677e\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(38 933)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(237 472)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(302 781)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(335 695)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(57 988)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#f5f2fd\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(508 482)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#ef677e\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(377 736)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#fa8fb9\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(675 1086)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(481 1017)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ef677e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(695 711)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#ef677e\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(545 417)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#fa8fb9\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(158 427)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ffd95e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(369 841)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(600 1020)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#f5f2fd\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(411 703)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#e685d6\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(322 892)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#fa8fb9\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(80 1036)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(670 382)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#e685d6\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(41 334)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#f5f2fd\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(520 761)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#fa8fb9\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(700 409)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#fa8fb9\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(713 587)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ef677e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(603 952)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#fa8fb9\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(411 1000)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#f5f2fd\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(297 635)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(329 1117)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#fa8fb9\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(96 336)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#ffd95e\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(131 809)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#e685d6\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(239 590)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(684 893)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ef677e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(392 823)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#ffd95e\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(707 587)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(46 1084)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#e685d6\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(427 475)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(677 587)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#f5f2fd\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(518 395)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ef677e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(246 618)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(261 959)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ffd95e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(418 744)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#ffd95e\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(615 564)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#e685d6\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(89 932)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#ef677e\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(557 653)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#fa8fb9\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(93 1126)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#e685d6\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(453 847)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ef677e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(107 751)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#f5f2fd\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(129 1075)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#e685d6\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(276 851)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#e685d6\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(123 861)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#f5f2fd\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(97 482)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#fa8fb9\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(165 448)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(695 955)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#f5f2fd\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(568 819)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#e685d6\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(709 972)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ef677e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(573 370)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ef677e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(512 575)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#e685d6\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(187 529)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(342 1069)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ffd95e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(347 525)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(578 383)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(298 637)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(617 663)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(679 1074)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#fa8fb9\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(157 599)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#ef677e\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(621 691)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#ef677e\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(69 727)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#fa8fb9\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(463 377)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(636 653)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(627 332)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ef677e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(27 716)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#e685d6\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(483 448)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#fa8fb9\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(26 421)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#e685d6\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(716 321)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#fa8fb9\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(595 941)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#f5f2fd\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(469 661)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#fa8fb9\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(99 886)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(510 813)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(631 451)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#f5f2fd\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(189 1089)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"7\" fill=\"#ef677e\"/><circle r=\"2.1\" fill=\"#fff0a4\"/></g><g transform=\"translate(263 921)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"9\" fill=\"#f5f2fd\"/><circle r=\"2.7\" fill=\"#fff0a4\"/></g><g transform=\"translate(24 607)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#fa8fb9\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(333 515)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#e685d6\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(643 426)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"3\" fill=\"#ffd95e\"/><circle r=\"0.9\" fill=\"#fff0a4\"/></g><g transform=\"translate(551 827)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#f5f2fd\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(699 973)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"8\" fill=\"#fa8fb9\"/><circle r=\"2.4\" fill=\"#fff0a4\"/></g><g transform=\"translate(426 837)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#f5f2fd\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(550 993)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#f5f2fd\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><g transform=\"translate(670 402)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#f5f2fd\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(521 899)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#fa8fb9\"/><circle r=\"1.5\" fill=\"#fff0a4\"/></g><g transform=\"translate(417 882)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"6\" fill=\"#ef677e\"/><circle r=\"1.8\" fill=\"#fff0a4\"/></g><g transform=\"translate(502 861)\"><path d=\"M0 0v14\" stroke=\"#327b4b\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#ffd95e\"/><circle r=\"1.2\" fill=\"#fff0a4\"/></g><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#384538\" stroke-opacity=\".22\" stroke-width=\"47\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#f4d2a5\" stroke-width=\"40\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#fff8dd\" stroke-opacity=\".65\" stroke-width=\"2\" stroke-dasharray=\"5 17\" fill=\"none\"/></svg>","medium":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 740 1130\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"sky\" x2=\"0\" y2=\"1\"><stop stop-color=\"#284d57\"/><stop offset=\"1\" stop-color=\"#5f9776\"/></linearGradient></defs><rect width=\"740\" height=\"1130\" fill=\"url(#sky)\"/><path d=\"M0 390Q120 350 230 400T480 380T740 370V1130H0Z\" fill=\"#1b664b\"/><path d=\"M0 700Q180 640 360 720T740 650V1130H0Z\" fill=\"#104a39\" opacity=\".72\"/><circle cx=\"620\" cy=\"115\" r=\"55\" fill=\"#f3efbd\" opacity=\".75\"/><g opacity=\"0.8\"><rect x=\"339\" y=\"460\" width=\"10\" height=\"165\" fill=\"#574a37\"/><path d=\"M302 500 L344 295 L386 500Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"701\" y=\"1043\" width=\"10\" height=\"85\" fill=\"#574a37\"/><path d=\"M659 1083 L706 958 L753 1083Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"514\" y=\"698\" width=\"10\" height=\"139\" fill=\"#574a37\"/><path d=\"M494 738 L519 559 L544 738Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"672\" y=\"1047\" width=\"10\" height=\"80\" fill=\"#574a37\"/><path d=\"M656 1087 L677 967 L698 1087Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"73\" y=\"938\" width=\"10\" height=\"83\" fill=\"#574a37\"/><path d=\"M41 978 L78 855 L115 978Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"462\" y=\"1139\" width=\"10\" height=\"94\" fill=\"#574a37\"/><path d=\"M435 1179 L467 1045 L499 1179Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"314\" y=\"575\" width=\"10\" height=\"81\" fill=\"#574a37\"/><path d=\"M289 615 L319 494 L349 615Z\" fill=\"#155a43\"/></g><g opacity=\"1\"><rect x=\"223\" y=\"640\" width=\"10\" height=\"155\" fill=\"#574a37\"/><path d=\"M181 680 L228 485 L275 680Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"729\" y=\"602\" width=\"10\" height=\"66\" fill=\"#574a37\"/><path d=\"M700 642 L734 536 L768 642Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"497\" y=\"952\" width=\"10\" height=\"87\" fill=\"#574a37\"/><path d=\"M467 992 L502 865 L537 992Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"599\" y=\"662\" width=\"10\" height=\"135\" fill=\"#574a37\"/><path d=\"M560 702 L604 527 L648 702Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"358\" y=\"880\" width=\"10\" height=\"110\" fill=\"#574a37\"/><path d=\"M314 920 L363 770 L412 920Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"363\" y=\"758\" width=\"10\" height=\"81\" fill=\"#574a37\"/><path d=\"M348 798 L368 677 L388 798Z\" fill=\"#23845b\"/></g><g opacity=\"0.6\"><rect x=\"658\" y=\"994\" width=\"10\" height=\"131\" fill=\"#574a37\"/><path d=\"M632 1034 L663 863 L694 1034Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"679\" y=\"1103\" width=\"10\" height=\"108\" fill=\"#574a37\"/><path d=\"M662 1143 L684 995 L706 1143Z\" fill=\"#23845b\"/></g><g opacity=\"0.8\"><rect x=\"652\" y=\"560\" width=\"10\" height=\"96\" fill=\"#574a37\"/><path d=\"M619 600 L657 464 L695 600Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"708\" y=\"594\" width=\"10\" height=\"168\" fill=\"#574a37\"/><path d=\"M664 634 L713 426 L762 634Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"427\" y=\"827\" width=\"10\" height=\"130\" fill=\"#574a37\"/><path d=\"M402 867 L432 697 L462 867Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"560\" y=\"201\" width=\"10\" height=\"111\" fill=\"#574a37\"/><path d=\"M535 241 L565 90 L595 241Z\" fill=\"#1a6749\"/></g><g opacity=\"0.6\"><rect x=\"358\" y=\"712\" width=\"10\" height=\"101\" fill=\"#574a37\"/><path d=\"M342 752 L363 611 L384 752Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"513\" y=\"1118\" width=\"10\" height=\"177\" fill=\"#574a37\"/><path d=\"M480 1158 L518 941 L556 1158Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"-1\" y=\"402\" width=\"10\" height=\"175\" fill=\"#574a37\"/><path d=\"M-34 442 L4 227 L42 442Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"403\" y=\"204\" width=\"10\" height=\"60\" fill=\"#574a37\"/><path d=\"M367 244 L408 144 L449 244Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"124\" y=\"500\" width=\"10\" height=\"92\" fill=\"#574a37\"/><path d=\"M82 540 L129 408 L176 540Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"368\" y=\"562\" width=\"10\" height=\"76\" fill=\"#574a37\"/><path d=\"M353 602 L373 486 L393 602Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"426\" y=\"162\" width=\"10\" height=\"155\" fill=\"#574a37\"/><path d=\"M387 202 L431 7 L475 202Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"69\" y=\"611\" width=\"10\" height=\"145\" fill=\"#574a37\"/><path d=\"M29 651 L74 466 L119 651Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"30\" y=\"1034\" width=\"10\" height=\"116\" fill=\"#574a37\"/><path d=\"M0 1074 L35 918 L70 1074Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"223\" y=\"763\" width=\"10\" height=\"122\" fill=\"#574a37\"/><path d=\"M179 803 L228 641 L277 803Z\" fill=\"#1a6749\"/></g><g opacity=\"0.6\"><rect x=\"311\" y=\"900\" width=\"10\" height=\"98\" fill=\"#574a37\"/><path d=\"M278 940 L316 802 L354 940Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"175\" y=\"740\" width=\"10\" height=\"174\" fill=\"#574a37\"/><path d=\"M138 780 L180 566 L222 780Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"637\" y=\"288\" width=\"10\" height=\"116\" fill=\"#574a37\"/><path d=\"M593 328 L642 172 L691 328Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"54\" y=\"849\" width=\"10\" height=\"176\" fill=\"#574a37\"/><path d=\"M35 889 L59 673 L83 889Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"711\" y=\"646\" width=\"10\" height=\"148\" fill=\"#574a37\"/><path d=\"M680 686 L716 498 L752 686Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"460\" y=\"644\" width=\"10\" height=\"129\" fill=\"#574a37\"/><path d=\"M417 684 L465 515 L513 684Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"163\" y=\"412\" width=\"10\" height=\"119\" fill=\"#574a37\"/><path d=\"M130 452 L168 293 L206 452Z\" fill=\"#23845b\"/></g><g opacity=\"0.6\"><rect x=\"376\" y=\"477\" width=\"10\" height=\"103\" fill=\"#574a37\"/><path d=\"M336 517 L381 374 L426 517Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"212\" y=\"422\" width=\"10\" height=\"94\" fill=\"#574a37\"/><path d=\"M195 462 L217 328 L239 462Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"508\" y=\"345\" width=\"10\" height=\"102\" fill=\"#574a37\"/><path d=\"M479 385 L513 243 L547 385Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"466\" y=\"997\" width=\"10\" height=\"153\" fill=\"#574a37\"/><path d=\"M440 1037 L471 844 L502 1037Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"221\" y=\"819\" width=\"10\" height=\"83\" fill=\"#574a37\"/><path d=\"M193 859 L226 736 L259 859Z\" fill=\"#23845b\"/></g><g opacity=\"0.8\"><rect x=\"81\" y=\"339\" width=\"10\" height=\"97\" fill=\"#574a37\"/><path d=\"M41 379 L86 242 L131 379Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"451\" y=\"193\" width=\"10\" height=\"64\" fill=\"#574a37\"/><path d=\"M431 233 L456 129 L481 233Z\" fill=\"#1a6749\"/></g><g opacity=\"0.6\"><rect x=\"443\" y=\"512\" width=\"10\" height=\"87\" fill=\"#574a37\"/><path d=\"M411 552 L448 425 L485 552Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"223\" y=\"212\" width=\"10\" height=\"176\" fill=\"#574a37\"/><path d=\"M184 252 L228 36 L272 252Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"281\" y=\"758\" width=\"10\" height=\"64\" fill=\"#574a37\"/><path d=\"M258 798 L286 694 L314 798Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"241\" y=\"827\" width=\"10\" height=\"79\" fill=\"#574a37\"/><path d=\"M225 867 L246 748 L267 867Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"17\" y=\"330\" width=\"10\" height=\"153\" fill=\"#574a37\"/><path d=\"M-17 370 L22 177 L61 370Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"452\" y=\"1054\" width=\"10\" height=\"113\" fill=\"#574a37\"/><path d=\"M437 1094 L457 941 L477 1094Z\" fill=\"#23845b\"/></g><g opacity=\"0.8\"><rect x=\"508\" y=\"593\" width=\"10\" height=\"64\" fill=\"#574a37\"/><path d=\"M467 633 L513 529 L559 633Z\" fill=\"#23845b\"/></g><g opacity=\"1\"><rect x=\"720\" y=\"867\" width=\"10\" height=\"143\" fill=\"#574a37\"/><path d=\"M701 907 L725 724 L749 907Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"299\" y=\"1022\" width=\"10\" height=\"179\" fill=\"#574a37\"/><path d=\"M282 1062 L304 843 L326 1062Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"186\" y=\"408\" width=\"10\" height=\"159\" fill=\"#574a37\"/><path d=\"M153 448 L191 249 L229 448Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"-9\" y=\"260\" width=\"10\" height=\"86\" fill=\"#574a37\"/><path d=\"M-28 300 L-4 174 L20 300Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"337\" y=\"524\" width=\"10\" height=\"156\" fill=\"#574a37\"/><path d=\"M313 564 L342 368 L371 564Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"229\" y=\"1050\" width=\"10\" height=\"163\" fill=\"#574a37\"/><path d=\"M206 1090 L234 887 L262 1090Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"142\" y=\"1083\" width=\"10\" height=\"110\" fill=\"#574a37\"/><path d=\"M106 1123 L147 973 L188 1123Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"635\" y=\"516\" width=\"10\" height=\"141\" fill=\"#574a37\"/><path d=\"M617 556 L640 375 L663 556Z\" fill=\"#1a6749\"/></g><g opacity=\"1\"><rect x=\"511\" y=\"363\" width=\"10\" height=\"118\" fill=\"#574a37\"/><path d=\"M491 403 L516 245 L541 403Z\" fill=\"#1a6749\"/></g><g opacity=\"0.6\"><rect x=\"284\" y=\"1088\" width=\"10\" height=\"129\" fill=\"#574a37\"/><path d=\"M261 1128 L289 959 L317 1128Z\" fill=\"#23845b\"/></g><g opacity=\"0.6\"><rect x=\"534\" y=\"785\" width=\"10\" height=\"147\" fill=\"#574a37\"/><path d=\"M501 825 L539 638 L577 825Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.6\"><rect x=\"190\" y=\"607\" width=\"10\" height=\"71\" fill=\"#574a37\"/><path d=\"M149 647 L195 536 L241 647Z\" fill=\"#23845b\"/></g><g opacity=\"0.6\"><rect x=\"192\" y=\"934\" width=\"10\" height=\"97\" fill=\"#574a37\"/><path d=\"M152 974 L197 837 L242 974Z\" fill=\"#155a43\"/></g><g opacity=\"0.6\"><rect x=\"139\" y=\"988\" width=\"10\" height=\"106\" fill=\"#574a37\"/><path d=\"M120 1028 L144 882 L168 1028Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"697\" y=\"560\" width=\"10\" height=\"135\" fill=\"#574a37\"/><path d=\"M656 600 L702 425 L748 600Z\" fill=\"#1a6749\"/></g><g opacity=\"0.6\"><rect x=\"362\" y=\"911\" width=\"10\" height=\"120\" fill=\"#574a37\"/><path d=\"M346 951 L367 791 L388 951Z\" fill=\"#2f8c64\"/></g><g opacity=\"0.8\"><rect x=\"325\" y=\"413\" width=\"10\" height=\"97\" fill=\"#574a37\"/><path d=\"M294 453 L330 316 L366 453Z\" fill=\"#1a6749\"/></g><g opacity=\"0.8\"><rect x=\"721\" y=\"509\" width=\"10\" height=\"170\" fill=\"#574a37\"/><path d=\"M701 549 L726 339 L751 549Z\" fill=\"#155a43\"/></g><g opacity=\"0.8\"><rect x=\"575\" y=\"911\" width=\"10\" height=\"124\" fill=\"#574a37\"/><path d=\"M531 951 L580 787 L629 951Z\" fill=\"#2f8c64\"/></g><g opacity=\"1\"><rect x=\"751\" y=\"363\" width=\"10\" height=\"70\" fill=\"#574a37\"/><path d=\"M732 403 L756 293 L780 403Z\" fill=\"#1a6749\"/></g><circle cx=\"153\" cy=\"999\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"485\" cy=\"1043\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"325\" cy=\"485\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"655\" cy=\"963\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"23\" cy=\"600\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"408\" cy=\"792\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"705\" cy=\"808\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"552\" cy=\"890\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"509\" cy=\"1085\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"108\" cy=\"686\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"457\" cy=\"630\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"191\" cy=\"765\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"102\" cy=\"355\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"372\" cy=\"731\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"551\" cy=\"981\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"519\" cy=\"372\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"666\" cy=\"684\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"400\" cy=\"669\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"724\" cy=\"408\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"330\" cy=\"781\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"664\" cy=\"869\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"49\" cy=\"662\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"593\" cy=\"516\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"721\" cy=\"640\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"293\" cy=\"836\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"8\" cy=\"738\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"42\" cy=\"913\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"510\" cy=\"808\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"60\" cy=\"858\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"679\" cy=\"1061\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"454\" cy=\"1012\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"131\" cy=\"781\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"460\" cy=\"933\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"488\" cy=\"937\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"594\" cy=\"384\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"128\" cy=\"855\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"406\" cy=\"728\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"674\" cy=\"848\" r=\"2\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"735\" cy=\"716\" r=\"3\" fill=\"#e8ffb6\" opacity=\".8\"/><circle cx=\"56\" cy=\"414\" r=\"4\" fill=\"#e8ffb6\" opacity=\".8\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#384538\" stroke-opacity=\".22\" stroke-width=\"47\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#d2b98d\" stroke-width=\"40\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#fff8dd\" stroke-opacity=\".65\" stroke-width=\"2\" stroke-dasharray=\"5 17\" fill=\"none\"/></svg>","hard":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 740 1130\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"sky\" x2=\"0\" y2=\"1\"><stop stop-color=\"#9ed9ee\"/><stop offset=\"1\" stop-color=\"#d5e8e9\"/></linearGradient></defs><rect width=\"740\" height=\"1130\" fill=\"url(#sky)\"/><path d=\"M0 390Q120 350 230 400T480 380T740 370V1130H0Z\" fill=\"#7aa7a5\"/><path d=\"M0 700Q180 640 360 720T740 650V1130H0Z\" fill=\"#4b818d\" opacity=\".72\"/><path d=\"M-330 520 L-40 235 L230 520Z\" fill=\"#a2b8c6\"/><path d=\"M-115 330 L-40 235 L35 330 L-28 299 L-58 306Z\" fill=\"#f4fbff\"/><path d=\"M-215 520 L75 174 L345 520Z\" fill=\"#a2b8c6\"/><path d=\"M0 269 L75 174 L150 269 L87 238 L57 245Z\" fill=\"#f4fbff\"/><path d=\"M-100 520 L190 319 L460 520Z\" fill=\"#a2b8c6\"/><path d=\"M115 414 L190 319 L265 414 L202 383 L172 390Z\" fill=\"#f4fbff\"/><path d=\"M15 520 L305 117 L575 520Z\" fill=\"#a2b8c6\"/><path d=\"M230 212 L305 117 L380 212 L317 181 L287 188Z\" fill=\"#f4fbff\"/><path d=\"M130 520 L420 146 L690 520Z\" fill=\"#a2b8c6\"/><path d=\"M345 241 L420 146 L495 241 L432 210 L402 217Z\" fill=\"#f4fbff\"/><path d=\"M245 520 L535 310 L805 520Z\" fill=\"#a2b8c6\"/><path d=\"M460 405 L535 310 L610 405 L547 374 L517 381Z\" fill=\"#f4fbff\"/><path d=\"M360 520 L650 174 L920 520Z\" fill=\"#a2b8c6\"/><path d=\"M575 269 L650 174 L725 269 L662 238 L632 245Z\" fill=\"#f4fbff\"/><path d=\"M475 520 L765 162 L1035 520Z\" fill=\"#90a9bb\"/><path d=\"M690 257 L765 162 L840 257 L777 226 L747 233Z\" fill=\"#f4fbff\"/><path d=\"M0 560Q220 510 420 580T740 570V1130H0Z\" fill=\"#77a8a1\"/><path d=\"M685 635L699 570L713 635Z\" fill=\"#2d6b62\"/><path d=\"M538 861L557 796L576 861Z\" fill=\"#2d6b62\"/><path d=\"M449 938L463 873L477 938Z\" fill=\"#2d6b62\"/><path d=\"M645 731L658 666L671 731Z\" fill=\"#2d6b62\"/><path d=\"M310 614L323 549L336 614Z\" fill=\"#2d6b62\"/><path d=\"M213 862L230 797L247 862Z\" fill=\"#2d6b62\"/><path d=\"M612 686L629 621L646 686Z\" fill=\"#2d6b62\"/><path d=\"M442 1128L458 1063L474 1128Z\" fill=\"#2d6b62\"/><path d=\"M205 1122L230 1057L255 1122Z\" fill=\"#2d6b62\"/><path d=\"M319 835L340 770L361 835Z\" fill=\"#2d6b62\"/><path d=\"M274 689L305 624L336 689Z\" fill=\"#2d6b62\"/><path d=\"M311 949L339 884L367 949Z\" fill=\"#2d6b62\"/><path d=\"M248 739L279 674L310 739Z\" fill=\"#2d6b62\"/><path d=\"M264 714L285 649L306 714Z\" fill=\"#2d6b62\"/><path d=\"M337 768L362 703L387 768Z\" fill=\"#2d6b62\"/><path d=\"M639 841L669 776L699 841Z\" fill=\"#2d6b62\"/><path d=\"M449 714L469 649L489 714Z\" fill=\"#2d6b62\"/><path d=\"M543 968L568 903L593 968Z\" fill=\"#2d6b62\"/><path d=\"M504 1031L532 966L560 1031Z\" fill=\"#2d6b62\"/><path d=\"M65 959L80 894L95 959Z\" fill=\"#2d6b62\"/><path d=\"M631 894L651 829L671 894Z\" fill=\"#2d6b62\"/><path d=\"M145 829L171 764L197 829Z\" fill=\"#2d6b62\"/><path d=\"M402 836L415 771L428 836Z\" fill=\"#2d6b62\"/><path d=\"M191 910L219 845L247 910Z\" fill=\"#2d6b62\"/><path d=\"M103 844L127 779L151 844Z\" fill=\"#2d6b62\"/><path d=\"M466 703L488 638L510 703Z\" fill=\"#2d6b62\"/><path d=\"M307 1054L321 989L335 1054Z\" fill=\"#2d6b62\"/><path d=\"M534 839L549 774L564 839Z\" fill=\"#2d6b62\"/><path d=\"M551 1146L567 1081L583 1146Z\" fill=\"#2d6b62\"/><path d=\"M202 987L232 922L262 987Z\" fill=\"#2d6b62\"/><path d=\"M430 965L444 900L458 965Z\" fill=\"#2d6b62\"/><path d=\"M599 782L617 717L635 782Z\" fill=\"#2d6b62\"/><path d=\"M174 869L201 804L228 869Z\" fill=\"#2d6b62\"/><path d=\"M300 664L323 599L346 664Z\" fill=\"#2d6b62\"/><path d=\"M405 711L433 646L461 711Z\" fill=\"#2d6b62\"/><path d=\"M217 987L239 922L261 987Z\" fill=\"#2d6b62\"/><path d=\"M234 1030L252 965L270 1030Z\" fill=\"#2d6b62\"/><path d=\"M583 901L614 836L645 901Z\" fill=\"#2d6b62\"/><path d=\"M65 1145L89 1080L113 1145Z\" fill=\"#2d6b62\"/><path d=\"M169 616L184 551L199 616Z\" fill=\"#2d6b62\"/><path d=\"M212 708L242 643L272 708Z\" fill=\"#2d6b62\"/><path d=\"M276 949L302 884L328 949Z\" fill=\"#2d6b62\"/><path d=\"M42 709L68 644L94 709Z\" fill=\"#2d6b62\"/><path d=\"M-1 772L30 707L61 772Z\" fill=\"#2d6b62\"/><path d=\"M33 707L56 642L79 707Z\" fill=\"#2d6b62\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#384538\" stroke-opacity=\".22\" stroke-width=\"47\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#e6d4b5\" stroke-width=\"40\" stroke-linejoin=\"round\" stroke-linecap=\"round\" fill=\"none\"/><path d=\"M 162.8 983.1 L 333.0 892.7 L 503.2 779.7 L 273.8 734.5 L 214.6 598.9 L 384.8 519.8 L 562.4 406.8 L 222.0 406.8 L 444.0 271.2 L 251.6 214.7\" stroke=\"#fff8dd\" stroke-opacity=\".65\" stroke-width=\"2\" stroke-dasharray=\"5 17\" fill=\"none\"/></svg>","expert":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 1120\" preserveAspectRatio=\"xMidYMid slice\">\n<defs><linearGradient id=\"sky\" x2=\"0\" y2=\"1\"><stop stop-color=\"#15134c\"/><stop offset=\".46\" stop-color=\"#57409c\"/><stop offset=\"1\" stop-color=\"#ae6db6\"/></linearGradient><linearGradient id=\"hill\" x2=\".8\" y2=\"1\"><stop stop-color=\"#346b6c\"/><stop offset=\"1\" stop-color=\"#183d58\"/></linearGradient><linearGradient id=\"water\" x2=\"0\" y2=\"1\"><stop stop-color=\"#2c81a7\"/><stop offset=\"1\" stop-color=\"#0b365c\"/></linearGradient><radialGradient id=\"glow\"><stop stop-color=\"#fff8b7\" stop-opacity=\".9\"/><stop offset=\"1\" stop-color=\"#fff8b7\" stop-opacity=\"0\"/></radialGradient><pattern id=\"stars\" width=\"91\" height=\"103\" patternUnits=\"userSpaceOnUse\"><circle cx=\"22\" cy=\"18\" r=\"1.8\" fill=\"#fff3d1\"/><circle cx=\"68\" cy=\"81\" r=\"1.1\" fill=\"#f4d3ff\"/><circle cx=\"9\" cy=\"89\" r=\".8\" fill=\"#fff\"/></pattern></defs>\n<rect width=\"720\" height=\"1120\" fill=\"url(#sky)\"/><rect width=\"720\" height=\"620\" fill=\"url(#stars)\"/>\n<circle cx=\"585\" cy=\"125\" r=\"66\" fill=\"#fff1a8\"/><circle cx=\"559\" cy=\"96\" r=\"63\" fill=\"#242061\"/>\n<path d=\"M0 540Q140 405 285 500Q440 345 720 460V1120H0Z\" fill=\"#293d74\"/><path d=\"M0 650Q165 470 360 575Q530 435 720 545V1120H0Z\" fill=\"url(#hill)\"/>\n<path d=\"M455 560Q590 530 720 560V1120H420Q360 810 455 560Z\" fill=\"url(#water)\"/>\n<g fill=\"#7fc7dc\" opacity=\".42\"><path d=\"M505 620Q610 665 700 640\" stroke=\"#a7ecf4\" stroke-width=\"5\" fill=\"none\"/><path d=\"M460 770Q565 795 690 780\" stroke=\"#b5f7fb\" stroke-width=\"5\" fill=\"none\"/><path d=\"M460 940Q565 960 690 920\" stroke=\"#b5f7fb\" stroke-width=\"5\" fill=\"none\"/></g>\n<path d=\"M430 390Q535 322 688 391L720 530 402 520Z\" fill=\"#283557\"/>\n<g stroke=\"#1b254b\" stroke-width=\"5\"><rect x=\"491\" y=\"282\" width=\"160\" height=\"155\" rx=\"4\" fill=\"#b5a0bd\"/><rect x=\"457\" y=\"260\" width=\"45\" height=\"173\" fill=\"#a99bb8\"/><rect x=\"626\" y=\"243\" width=\"47\" height=\"188\" fill=\"#a99bb8\"/><rect x=\"551\" y=\"213\" width=\"49\" height=\"224\" fill=\"#c2a8cb\"/><path d=\"M449 264L480 192 510 264Z\" fill=\"#384d94\"/><path d=\"M617 245L649 160 680 245Z\" fill=\"#384d94\"/><path d=\"M540 214L576 116 611 214Z\" fill=\"#4551a0\"/></g>\n<g fill=\"#ffdc88\"><rect x=\"472\" y=\"300\" width=\"12\" height=\"22\" rx=\"6\"/><rect x=\"640\" y=\"280\" width=\"12\" height=\"22\" rx=\"6\"/><rect x=\"567\" y=\"260\" width=\"15\" height=\"27\" rx=\"7\"/><rect x=\"526\" y=\"329\" width=\"14\" height=\"24\" rx=\"7\"/><rect x=\"607\" y=\"329\" width=\"14\" height=\"24\" rx=\"7\"/></g>\n<path d=\"M555 437v-53a22 22 0 0 1 44 0v53Z\" fill=\"#4a2e60\"/>\n<path d=\"M0 700Q80 620 200 655Q310 690 360 730Q460 770 410 820Q350 870 230 845Q95 825 70 895Q45 945 205 965Q380 985 370 1050Q365 1100 285 1120\" fill=\"none\" stroke=\"#162c46\" stroke-width=\"65\" stroke-linecap=\"round\" opacity=\".65\"/>\n<path d=\"M0 700Q80 620 200 655Q310 690 360 730Q460 770 410 820Q350 870 230 845Q95 825 70 895Q45 945 205 965Q380 985 370 1050Q365 1100 285 1120\" fill=\"none\" stroke=\"#8b7794\" stroke-width=\"49\" stroke-linecap=\"round\"/>\n<path d=\"M0 700Q80 620 200 655Q310 690 360 730Q460 770 410 820Q350 870 230 845Q95 825 70 895Q45 945 205 965Q380 985 370 1050Q365 1100 285 1120\" fill=\"none\" stroke=\"#c6aec5\" stroke-width=\"41\" stroke-linecap=\"round\" stroke-dasharray=\"17 4\"/>\n<g fill=\"#305f57\"><ellipse cx=\"55\" cy=\"1010\" rx=\"110\" ry=\"100\"/><ellipse cx=\"670\" cy=\"1060\" rx=\"115\" ry=\"160\"/><ellipse cx=\"80\" cy=\"510\" rx=\"140\" ry=\"95\"/><ellipse cx=\"700\" cy=\"620\" rx=\"100\" ry=\"100\"/></g>\n<g fill=\"#f6a1d8\"><circle cx=\"48\" cy=\"1040\" r=\"19\"/><circle cx=\"92\" cy=\"1015\" r=\"13\"/><circle cx=\"129\" cy=\"1068\" r=\"17\"/><circle cx=\"654\" cy=\"980\" r=\"20\"/><circle cx=\"700\" cy=\"1019\" r=\"15\"/><circle cx=\"619\" cy=\"1090\" r=\"14\"/><circle cx=\"65\" cy=\"510\" r=\"13\"/><circle cx=\"125\" cy=\"485\" r=\"12\"/><circle cx=\"670\" cy=\"593\" r=\"16\"/></g>\n<g fill=\"#fff7c7\"><circle cx=\"90\" cy=\"395\" r=\"3\"/><circle cx=\"230\" cy=\"600\" r=\"4\"/><circle cx=\"545\" cy=\"702\" r=\"3\"/><circle cx=\"620\" cy=\"850\" r=\"4\"/><circle cx=\"150\" cy=\"1030\" r=\"4\"/><circle cx=\"380\" cy=\"280\" r=\"3\"/></g>\n</svg>"};
+let mapDifficulty='easy',mapPage=0,mapSelected=1;
+function mapPosition(i){const x=[19,49,77,49,20,42,76,52,23,49][i];const y=[89,80,71,62,53,44,35,27,19,11][i];return{x,y}}
+function openMap(d,level){mapDifficulty=d||$('difficulty').value;const max=unlocked(mapDifficulty);mapSelected=Math.min(Math.max(1,level||max),max);mapPage=Math.floor((mapSelected-1)/10);$('welcome').classList.add('hidden');hide();$('mapOverlay').classList.remove('hidden');renderMap()}
+function renderMap(){const w=WORLDS[mapDifficulty],max=unlocked(mapDifficulty),start=mapPage*10+1,area=$('mapLandscape');$('mapTitle').textContent=w.name+' · '+start+'–'+(start+9);area.className='map-landscape '+w.cls;
+const positions=Array.from({length:10},(_,i)=>mapPosition(i));
+let scene='<div class="world-art" aria-hidden="true">'+INLINE_WORLDS[mapDifficulty]+'</div>';
+// Sanfter, durchgehender Weg zwischen den zehn runden Levelpunkten.
+const coords=positions.map(p=>[p.x,p.y]);
+let d='M '+coords[0].join(' ');
+for(let i=1;i<coords.length-1;i++){
+ const m=[(coords[i][0]+coords[i+1][0])/2,(coords[i][1]+coords[i+1][1])/2];
+ d+=' Q '+coords[i].join(' ')+' '+m.join(' ');
+}
+d+=' Q '+coords[coords.length-1].join(' ')+' '+coords[coords.length-1].join(' ');
+scene+='<svg class="map-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="'+d+'" fill="none" stroke="#2c243e" stroke-opacity=".5" stroke-width="6.5" stroke-linecap="round"/><path d="'+d+'" fill="none" stroke="#f6e0b8" stroke-width="5" stroke-linecap="round"/><path d="'+d+'" fill="none" stroke="#c99f75" stroke-width=".6" stroke-dasharray="1 1.5"/></svg>';
+for(let i=0;i<10;i++){const l=start+i,p=positions[i],done=l<max,now=l===max,locked=l>max,st=stars(mapDifficulty,l);scene+='<div role="button" tabindex="0" class="map-node '+(done?'done':now?'now':'locked')+'" style="left:'+p.x+'%;top:'+p.y+'%" data-maplevel="'+l+'" '+(now?'aria-current="step" ':'')+'aria-label="Level '+l+(locked?' gesperrt':' spielbar')+'">'+(locked?'🔒':l)+'<small>'+(st?'⭐'.repeat(st):now?'▶ Spielen':'')+'</small></div>'}
+area.innerHTML=scene;$('mapInfo').textContent='Level '+mapSelected+' · '+(stars(mapDifficulty,mapSelected)?'⭐'.repeat(stars(mapDifficulty,mapSelected)):'noch ohne Sterne')+' · '+Math.min(8,{easy:1,medium:2,hard:3,expert:4}[mapDifficulty]+Math.floor((mapSelected-1)/6))+' Schloss-Paare (max.)';$('mapPlay').disabled=mapSelected>max;$('mapNext').disabled=false;$('mapPrev').disabled=mapPage===0}
+function openAchievements(){
+ const d=$('difficulty').value,max=unlocked(d),completed=Math.max(0,max-1);
+ let totalStars=0,perfect=0;
+ for(let l=1;l<=Math.min(max,10000);l++){const n=stars(d,l);totalStars+=n;if(n===3)perfect++}
+ const goals=[
+  ['🌷','Erste Blüte',completed>=1,'1 Level gewinnen'],
+  ['🌼','Blumenstrauß',completed>=10,'10 Level gewinnen'],
+  ['🌳','Entdecker',completed>=25,'25 Level gewinnen'],
+  ['🏰','Weltenwanderer',completed>=100,'100 Level gewinnen'],
+  ['⭐','Sternensammler',totalStars>=30,'30 Sterne sammeln'],
+  ['🌟','Sternenkrone',totalStars>=100,'100 Sterne sammeln'],
+  ['👑','Perfekter Start',perfect>=3,'3 Level mit drei Sternen'],
+  ['💎','Meisterschaft',perfect>=20,'20 Level mit drei Sternen']
+ ];
+ $('achievementsSummary').textContent='In '+WORLDS[d].name+': '+completed+' Level geschafft · '+totalStars+' Sterne · '+perfect+' perfekte Level.';
+ $('achievementGrid').innerHTML=goals.map(([icon,name,earned,detail])=>'<div class="achievement '+(earned?'':'locked')+'"><span class="medal">'+(earned?icon:'🔒')+'</span><strong>'+name+'</strong>'+detail+'<br>'+(earned?'✓ Freigeschaltet':'Noch gesperrt')+'</div>').join('');
+ $('welcome').classList.add('hidden');$('achievementsOverlay').classList.remove('hidden');
+}
+function save(){try{localStorage.setItem(SAVE,JSON.stringify(g))}catch(e){}}function snapshot(){history.push(JSON.stringify(g));if(history.length>90)history.shift()}function msg(t){const pairs=g?(g.pairs||{easy:1,medium:2,hard:3,expert:4}[g.difficulty]):0;const opened=g?.keys?.length||0;$('message').textContent=(pairs?'🔑 '+opened+'/'+pairs+' · 🔒 '+(pairs-opened)+'  |  ':'')+t}function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// Jeder Aufbau wird mit einem vollständigen, regelkonformen Lösungsweg geprüft.
+// Die Mischung verändert Wörter und Reihenfolge, nicht die garantierte Erreichbarkeit.
+function create(level,d){
+ const c=CFG[d],r=rng(level*2917+c.n*73),groups=shuffle(Array.from({length:c.total},(_,i)=>DATA[(level-1+i)%DATA.length]),r);
+ const words=groups.map((group,i)=>shuffle(group[1].slice(0,c.per).map((v,k)=>({id:i*10+k,g:i,word:v[0],emoji:v[1],picture:k%2===0,kind:'word',key:null,lock:null})),r));
+   // Schlüssel und Schlösser werden erst nach der Verteilung auf erreichbare
+  // Nachziehkarten gesetzt, damit sie nicht unerkannt unter blauen Karten bleiben.
+  let pairs=Math.min(8,{easy:1,medium:2,hard:3,expert:4}[d]+Math.floor((level-1)/6));
+const cats=groups.map((v,i)=>({id:1000+i,g:i,word:v[0],emoji:'👑',kind:'category'}));
+ const initial=1+Math.floor(r()*2),cols=Array.from({length:c.n},()=>[]);
+ const initialCols=shuffle(Array.from({length:c.n},(_,i)=>i),r).slice(0,initial);
+ const initialAt=Array.from({length:c.n},()=>-1);initialCols.forEach((col,group)=>initialAt[col]=group);
+ const desiredStock={easy:20,medium:25,hard:30,expert:40}[d];
+ const totalCards=c.total*(c.per+1),columnCount=Math.min(totalCards-desiredStock,c.n*8);
+ const heights=Array(c.n).fill(Math.floor(columnCount/c.n));for(let i=0;i<columnCount%c.n;i++)heights[(i+level)%c.n]++; for(let t=0;t<c.n*3;t++){const a=Math.floor(r()*c.n),b=Math.floor(r()*c.n);if(a!==b&&heights[a]>5&&heights[b]<9){heights[a]--;heights[b]++;}}
+ // Karten verschiedener Kategorien werden über ALLE Spalten verteilt.
+ // Innerhalb einer Spalte bleiben die Schichten in einer lösbaren Reihenfolge.
+ const capacities=heights.map((h,i)=>h-(initialAt[i]>=0?1:0));
+ const remaining=[];
+ for(let group=c.total-1;group>=0;group--){
+   const order=shuffle(Array.from({length:c.n},(_,i)=>i),r);
+   const target=Math.min(words[group].length,Math.max(2,Math.ceil(columnCount/c.total)));
+   let placed=0;
+   for(let turn=0;turn<target;turn++){
+     const choices=order.filter(i=>cols[i].length<capacities[i]&&(initialAt[i]<0||group>=initialAt[i]));
+     if(!choices.length)break;
+     // Verschiedene Spalten bevorzugen, damit keine langen gleichartigen Blöcke entstehen.
+     const col=choices[turn%choices.length];
+     cols[col].push(words[group].pop());placed++;
+   }
+   remaining.push(...words[group]);
+ }
+ // Falls noch Plätze frei sind, nur weitere Wortkarten aus dem Nachziehvorrat nehmen.
+ // Karten werden von unten nach oben in Gruppenreihenfolge angeordnet.
+ for(let i=0;i<c.n;i++){
+   while(cols[i].length<capacities[i]){
+     const available=remaining.filter(x=>x.kind==='word'&&(initialAt[i]<0||x.g>=initialAt[i])&&(cols[i].length===0||x.g<=cols[i][cols[i].length-1].g));
+     if(!available.length)break;
+     const pick=available[Math.floor(r()*available.length)];
+     cols[i].push(pick);remaining.splice(remaining.indexOf(pick),1);
+   }
+ }
+ for(let group=0;group<initial;group++)cols[initialCols[group]].push(cats[group]);
+ for(let group=initial;group<c.total;group++)remaining.push(cats[group]);
+   shuffle(remaining,r);
+  // Schlüssel erscheinen in frühen Kategorien, Schlösser liegen verteilt
+  // in verschiedenen Tableau-Spalten und verschiedenen späteren Kategorien.
+  // Dadurch ist der Schlüssel stets vor der zugehörigen Schloss-Kategorie erreichbar.
+  const early=remaining.filter(x=>x.kind==='word'&&x.g<Math.min(3,c.total));
+  const tableauEarly=cols.flatMap(col=>col.filter(x=>x.kind==='word'&&x.g<Math.min(3,c.total)));
+  const keyPool=shuffle(early.concat(tableauEarly),r);
+  const lockPool=shuffle(cols.flatMap((col,i)=>col
+    .filter(x=>x.kind==='word'&&x.g>=Math.min(3,c.total))
+    .map(card=>({card,col:i}))),r);
+  pairs=Math.min(pairs,keyPool.length,lockPool.length);
+  const chosenKeys=[],chosenLocks=[],usedGroups=new Set(),usedCols=new Set();
+  for(let p=0;p<pairs;p++){
+    const key=keyPool[p];
+    const candidates=lockPool.filter(x=>!chosenLocks.some(y=>y.card===x.card));
+    candidates.sort((a,b)=>{
+      const sa=(usedGroups.has(a.card.g)?2:0)+(usedCols.has(a.col)?1:0);
+      const sb=(usedGroups.has(b.card.g)?2:0)+(usedCols.has(b.col)?1:0);
+      return sa-sb;
+    });
+    const lock=candidates[0];
+    if(!key||!lock)break;
+    const code=String.fromCharCode(65+p);
+    key.key=code;lock.card.lock=code;
+    chosenKeys.push(key);chosenLocks.push(lock);
+    usedGroups.add(lock.card.g);usedCols.add(lock.col);
+  }
+  pairs=chosenLocks.length;
+  // Neue Hindernisse: Eis schmilzt nach Abschluss der vorherigen Kategorie,
+  // Ketten öffnen sich nach Abschluss von zwei vorherigen Kategorien.
+  // Hindernisse werden nur auf Wortkarten aus späteren Kategorien gesetzt.
+  const difficultyRank={easy:0,medium:1,hard:2,expert:3}[d];
+  const iceCount=level>=4?Math.min(4,Math.floor((level-4)/8)+1+difficultyRank):0;
+  const chainCount=level>=10?Math.min(3,Math.floor((level-10)/12)+Math.max(0,difficultyRank-1)):0;
+  const blocked=new Set(chosenLocks.map(x=>x.card));
+  const iceCandidates=shuffle(cols.flatMap(col=>col.filter(x=>x.kind==='word'&&x.g>=2&&!blocked.has(x))),r);
+  for(const card of iceCandidates.slice(0,iceCount)){card.ice=card.g-1;blocked.add(card)}
+  const chainCandidates=shuffle(cols.flatMap(col=>col.filter(x=>x.kind==='word'&&x.g>=3&&!blocked.has(x))),r);
+  for(const card of chainCandidates.slice(0,chainCount)){card.chain=card.g-2;blocked.add(card)}
+  // Nur die Schlüssel aus dem Nachziehstapel werden nach vorne geholt.
+  const specials=chosenKeys.filter(key=>remaining.includes(key));
+  for(const key of specials)remaining.splice(remaining.indexOf(key),1);
+  const stockDraw=specials.slice();
+  while(stockDraw.length<desiredStock&&remaining.length)stockDraw.push(remaining.shift());
+  const stock=stockDraw.reverse();
+const state={level,difficulty:d,groups:groups.map(v=>v[0]),cols,found:Array.from({length:c.n},()=>[]),active:Array(c.total).fill(false),slotGroups:Array(c.n).fill(null),completedGroups:[],keys:[],stock:stock,reserve:remaining,waste:[],moves:0,hintsUsed:0,completed:false,initialCols,pairs};
+ const minMoves=verifyDeal(state);if(minMoves===null)throw Error('Aufbau nicht lösbar – bitte erneut versuchen.');
+ state.referenceMoves=minMoves;state.minMoves=minMoves;state.limit=Math.max(minMoves,Math.ceil(minMoves*1.10));state.verified=true;state.iceCount=iceCount;state.chainCount=chainCount;
+ g=state;history=[];selected=null;render('🧩 Level '+level+' · '+pairs+' Schlösser · '+iceCount+' Eis · '+chainCount+' Ketten · Lösungsweg geprüft · 10 % Zugreserve.');
+}
+function verifyDeal(state){
+ const previous=g;g=JSON.parse(JSON.stringify(state));
+ const witness=[];
+ try{
+  const c=config();
+  function place(sel,slot){
+   if(!valid(sel,{type:'found',i:slot}))return false;
+   const cards=sel.type==='waste'?[g.waste.pop()]:g.cols[sel.i].splice(sel.j);
+   if(cards[0].kind==='category'){g.slotGroups[slot]=cards[0].g;g.active[cards[0].g]=true;}
+   else{g.found[slot].push(...cards);if(g.found[slot].length===c.per){g.completedGroups.push(g.slotGroups[slot]);g.slotGroups[slot]=null;g.found[slot]=[];}}
+   for(const card of cards)if(card.key&&!g.keys.includes(card.key))g.keys.push(card.key);
+   g.moves++;witness.push({op:'place',sel:{...sel},slot});return true;
+  }
+  function draw(){if(!g.stock.length){if(g.reserve.length){g.stock=g.reserve.splice(0).reverse();}else if(g.waste.length){g.stock=g.waste.reverse();g.waste=[];}else return false;}g.waste.push(g.stock.pop());witness.push({op:'draw'});return true;}
+  function takeFromDraw(kind,group,slot){
+   const budget=(g.stock.length+g.waste.length+g.reserve.length+5)*3;
+   for(let n=0;n<budget;n++){
+    const w=topCard(g.waste);
+    if(w&&w.kind===kind&&w.g===group)return place({type:'waste'},slot);
+    if(!draw())return false;
+   }
+   return false;
+  }
+  for(let group=0;group<c.total;group++){
+   const slot=group%c.n;
+   if(group<g.initialCols.length){
+    const colIndex=g.initialCols[group],col=g.cols[colIndex];if(!place({type:'cols',i:colIndex,j:col.length-1},slot))return false;
+   }else if(!takeFromDraw('category',group,slot))return false;
+   // Alle jetzt oben erreichbaren Wortgruppen dieses Bereichs ablegen.
+   for(let i=0;i<g.cols.length;i++){
+    const col=g.cols[i];let j=col.length;
+    while(j>0&&col[j-1].kind==='word'&&col[j-1].g===group)j--;
+    if(j<col.length&&!place({type:'cols',i,j},slot))return false;
+   }
+   while(g.slotGroups[slot]===group){if(!takeFromDraw('word',group,slot))return false;}
+  }
+  const solved=g.completedGroups.length===c.total&&g.cols.every(x=>!x.length)&&!g.stock.length&&!g.reserve.length&&!g.waste.length;
+  if(!solved)return null;
+  return replayWitness(state,witness) ? g.moves : null;
+ }finally{g=previous;}
+}
+// Zweite Prüfung: den erzeugten Lösungsweg von einem frischen Spielzustand
+// erneut ausführen. Jede Ablage wird mit denselben Regeln wie im Spiel geprüft.
+// Dies ist ein geprüfter Lösungsweg, keine Suche nach dem mathematischen Optimum.
+function replayWitness(state,steps){
+ const previous=g;g=JSON.parse(JSON.stringify(state));
+ try{
+  const c=config();
+  for(const step of steps){
+   if(step.op==='draw'){
+    if(!g.stock.length){
+     if(g.reserve.length)g.stock=g.reserve.splice(0).reverse();
+     else if(g.waste.length){g.stock=g.waste.reverse();g.waste=[];}
+     else return false;
+    }
+    if(!g.stock.length)return false;
+    g.waste.push(g.stock.pop());
+    continue;
+   }
+   if(step.op!=='place'||!valid(step.sel,{type:'found',i:step.slot}))return false;
+   const cards=step.sel.type==='waste'?[g.waste.pop()]:g.cols[step.sel.i].splice(step.sel.j);
+   if(cards[0].kind==='category'){g.slotGroups[step.slot]=cards[0].g;g.active[cards[0].g]=true;}
+   else{
+    g.found[step.slot].push(...cards);
+    if(g.found[step.slot].length===c.per){
+     g.completedGroups.push(g.slotGroups[step.slot]);
+     g.slotGroups[step.slot]=null;g.found[step.slot]=[];
+    }
+   }
+   for(const card of cards)if(card.key&&!g.keys.includes(card.key))g.keys.push(card.key);
+   g.moves++;
+  }
+  return g.completedGroups.length===c.total&&g.cols.every(a=>!a.length)&&
+   !g.stock.length&&!g.waste.length&&!g.reserve.length&&
+   g.moves<=Math.max(g.moves,Math.ceil(g.moves*1.1));
+ }finally{g=previous;}
+}
+function unlockedCard(card){return (!card.lock||g.keys.includes(card.lock))&&(card.ice==null||g.completedGroups.includes(card.ice))&&(card.chain==null||g.completedGroups.includes(card.chain))}function visibleFrom(col,j){let a=g.cols[col];if(j<0||j>=a.length)return false;let first=a[j];if(!unlockedCard(first))return false;if(first.kind==='category')return j===a.length-1;for(let k=j+1;k<a.length;k++)if(a[k].kind!=='word'||a[k].g!==first.g||!unlockedCard(a[k]))return false;return true}
+function selection(type,i,j){if(type==='cols'){if(!visibleFrom(i,j))return null;return{type,i,j}}if(type==='waste'&&g.waste.length&&unlockedCard(topCard(g.waste)))return{type};return null}
+function chosenCards(sel){return sel.type==='waste'?[topCard(g.waste)]:g.cols[sel.i].slice(sel.j)}
+function slotForGroup(group){return g.slotGroups.indexOf(group)}
+function valid(sel,dest){
+ if(!sel||sel.type==='cols'&&dest.type==='cols'&&sel.i===dest.i)return false;
+ let cards=chosenCards(sel),first=cards[0];if(!first||cards.some(card=>!unlockedCard(card)))return false;
+ if(dest.type==='found'){
+  if(dest.i<0||dest.i>=g.slotGroups.length)return false;
+  const group=g.slotGroups[dest.i];
+  if(first.kind==='category')return cards.length===1&&group===null&&!g.active[first.g]&&!g.completedGroups.includes(first.g);
+  return first.kind==='word'&&group===first.g&&cards.every(card=>card.kind==='word'&&card.g===group)&&g.found[dest.i].length+cards.length<=config().per;
+ }
+ if(dest.type==='cols'){
+  if(first.kind!=='word')return false;
+  let dst=topCard(g.cols[dest.i]);return !dst||dst.kind==='word'&&dst.g===first.g&&unlockedCard(dst);
+ }
+ return false;
+}
+function move(sel,dest){
+ if(!valid(sel,dest))return false;
+ if(g.moves>=moveLimit()){outOfMoves();return false}
+ snapshot();let cards=sel.type==='waste'?[g.waste.pop()]:g.cols[sel.i].splice(sel.j);
+ if(dest.type==='found'){
+  if(cards[0].kind==='category'){g.slotGroups[dest.i]=cards[0].g;g.active[cards[0].g]=true}
+  else {g.found[dest.i].push(...cards);if(g.found[dest.i].length===config().per){g.completedGroups.push(g.slotGroups[dest.i]);g.slotGroups[dest.i]=null;g.found[dest.i]=[];}}
+ }else g.cols[dest.i].push(...cards);
+ for(let card of cards)if(card.key&&!g.keys.includes(card.key))g.keys.push(card.key);
+ g.moves++;playSound(cards[0].kind==='category'?'unlock':'move');selected=null;render(cards[0].kind==='category'?'👑 '+cards[0].word+' auf freiem Ablagefeld geöffnet!':'✓ '+cards.length+' Karte(n) verschoben.');checkEnd();return true;
+}
+function tap(type,i,j){if(!g||g.completed)return;if(selected&&move(selected,{type,i}))return;if(type==='cols'||type==='waste'){let next=selection(type,i,j);if(next){selected=next;let cards=chosenCards(next);render(cards.length+' Karte(n) ausgewählt: '+cards[0].word+'. Tippe auf ein passendes Ziel.');return}}if(type==='found'){render(g.slotGroups[i]!==null?'Hier gehören Wörter aus „'+g.groups[g.slotGroups[i]]+'“ hin.':'Freies Ablagefeld: Ziehe eine beliebige goldene Kategorienkarte hierher.');return}selected=null;render('Ziehe eine Karte oder Kartengruppe auf einen freien Platz oder eine passende Karte.');}
+function checkEnd(){if(g.completedGroups.length===config().total){g.completed=true;const ratio=g.moves/Math.max(1,g.referenceMoves||g.minMoves||g.limit/1.1),rating=g.hintsUsed===0&&ratio<=1.06?3:g.hintsUsed<=1&&ratio<=1.13?2:1;storeStars(g.difficulty,g.level,rating);try{localStorage.setItem(PROGRESS+'_'+g.difficulty,String(Math.max(unlocked(g.difficulty),g.level+1)))}catch(e){}save();playSound('win');dialog('🏆 Level '+g.level+' geschafft!','⭐'.repeat(rating)+' · '+g.moves+' Züge · '+g.hintsUsed+' Hinweise · Level '+(g.level+1)+' freigeschaltet!',[['🗺️ Zur Landschaftskarte',()=>openMap(g.difficulty,g.level+1)],['▶ Nächstes Level',()=>{hide();create(g.level+1,g.difficulty)}]]);return}if(g.moves>=moveLimit())outOfMoves()}
+let soundEnabled=false;
+try{soundEnabled=localStorage.getItem('solitaireAZ_sound')==='on'}catch(e){}
+function updateSoundButton(){const b=$('soundToggle');if(b)b.textContent=soundEnabled?'🔊 Ton ausschalten':'🔇 Ton einschalten'}
+function playSound(kind){if(!soundEnabled)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),tones=kind==='win'?[523,659,784]:kind==='unlock'?[440,660]:[420];tones.forEach((freq,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),t=ctx.currentTime+i*.12;osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.09,t+.015);gain.gain.exponentialRampToValueAtTime(.0001,t+.17);osc.connect(gain);gain.connect(ctx.destination);osc.start(t);osc.stop(t+.18)});setTimeout(()=>ctx.close().catch(()=>{}),900)}catch(e){}}
+function outOfMoves(){dialog('Keine Züge mehr','Das Zuglimit ist erreicht. Versuche eine andere Reihenfolge.',[['Erneut spielen',()=>{hide();create(g.level,g.difficulty)}],['Menü',()=>{hide();openMenu()}]])}function dialog(title,body,buttons){$('dialogTitle').textContent=title;$('dialogTitle').classList.toggle('victory-burst',title.includes('geschafft'));$('dialogText').textContent=body;let area=$('dialogButtons');area.replaceChildren();buttons.forEach(([label,fn])=>{let b=document.createElement('button');b.textContent=label;b.addEventListener('click',fn);area.append(b)});$('dialog').classList.remove('hidden')}function hide(){$('dialog').classList.add('hidden')}
+function hint(){if(!g||g.completed)return;if(g.hintsUsed>=config().hints){msg('Keine Hinweise mehr.');return}let advice=null;if(g.waste.length&&topCard(g.waste).kind==='category'&&g.slotGroups.includes(null))advice='Ziehe die goldene Karte aus dem Nachziehstapel auf ein freies oberes Feld.';for(let i=0;i<g.cols.length&&!advice;i++){let a=g.cols[i];if(a.length&&topCard(a).kind==='category'&&g.slotGroups.includes(null)){advice='Ziehe die goldene Karte „'+topCard(a).word+'“ auf ein beliebiges freies oberes Ablagefeld.';break}}if(!advice){for(let i=0;i<g.cols.length&&!advice;i++){let a=g.cols[i];for(let j=a.length-1;j>=0;j--){if(visibleFrom(i,j)&&slotForGroup(a[j].g)!==-1&&g.found[slotForGroup(a[j].g)].length+a.length-j<=config().per){advice='Tippe auf „'+a[j].word+'“ und dann oben auf „'+g.groups[a[j].g]+'“.';break}}}}if(!advice)advice='Verschiebe eine passende Kartengruppe auf einen anderen Stapel.';snapshot();g.hintsUsed++;render('💡 '+advice)}
+function render(t){if(!g)return;let c=config();$('level').textContent='Level '+g.level;$('moves').textContent=moveLimit()-g.moves;$('hints').textContent=c.hints-g.hintsUsed;$('score').textContent=g.completedGroups.length+'/'+c.total;$('stockCount').textContent=g.stock.length||(g.reserve?.length?'＋':'↻');$('stock').disabled=!g.stock.length&&!g.waste.length&&!(g.reserve?.length);let waste=$('waste');waste.classList.toggle('hidden',!g.waste.length);waste.classList.toggle('selected',selected?.type==='waste');if(g.waste.length){let w=topCard(g.waste);waste.classList.toggle('locked',!unlockedCard(w));waste.textContent=(!unlockedCard(w)?(w.lock?'🔒 '+w.lock:w.ice!=null?'🧊 Eis':'⛓️ Kette')+' · ':'')+(w.picture?w.emoji+' ':'')+w.word+(w.key?' 🔑'+w.key:'');}$('board').style.setProperty('--n',c.n);let out='';const maxStack=Math.max(1,...g.cols.map(a=>a.length));const available=Math.max(140,window.innerHeight-(document.querySelector('header').offsetHeight+document.querySelector('.toolbar').offsetHeight+document.querySelector('.footer').offsetHeight+(document.querySelector('.target')?.offsetHeight || 72)+70));const step=Math.max(9,Math.min(23,Math.floor((available-105)/Math.max(1,maxStack-1))));for(let i=0;i<c.n;i++){let a=g.cols[i],f=g.found[i],slotGroup=g.slotGroups[i];out+='<div class="column"><div class="target '+(slotGroup!==null?'active':'')+'" data-type="found" data-i="'+i+'">'+(slotGroup!==null?'<span class="cat">'+esc(g.groups[slotGroup])+'</span><span class="count">👑 '+f.length+'/'+c.per+'</span>':'♛<br>Frei')+'</div><div class="stack '+(!a.length?'empty':'')+'" data-type="cols" data-i="'+i+'">';for(let j=0;j<a.length;j++){let card=a[j],front=j===a.length-1||(j>=a.length-3&&a.slice(j).every(x=>x.g===card.g&&x.kind==='word'))||j>=a.length-2&&card.kind==='category',locked=front&&!unlockedCard(card),isSelected=selected?.type==='cols'&&selected.i===i&&j>=selected.j;out+='<div data-type="cols" data-i="'+i+'" data-j="'+j+'" class="card '+(!front?'back':card.kind==='category'?'category':locked?'locked':'')+' '+(isSelected?'selected':'')+'" style="top:'+(j*step)+'px;z-index:'+(j+1)+'">';if(!front)out+='◆<br>◆ ◆';else if(locked)out+=card.lock?'🔒<small>'+card.lock+' Schloss</small>':card.ice!=null?'🧊<small>Nach '+esc(g.groups[card.ice])+'</small>':'⛓️<small>Nach '+esc(g.groups[card.chain])+'</small>';else if(card.kind==='category')out+='👑<br><span class="catword">'+esc(card.word)+'</span>';else out+=(card.picture?'<span class="emoji">'+card.emoji+'</span>':'')+esc(card.word)+(card.key?'<small>🔑 '+card.key+'</small>':'');out+='</div>'}out+='</div></div>'}$('board').innerHTML=out;
+if(selected){document.querySelectorAll('.target,.stack').forEach(el=>{const d={type:el.dataset.type,i:Number(el.dataset.i)};if(valid(selected,d))el.classList.add('valid-drop')})}
+document.querySelectorAll('.stack').forEach((el,i)=>{const n=g.cols[i].length;el.style.setProperty('--stack-height',Math.max(70,Math.min(112,window.innerWidth*.175)+Math.max(0,n-1)*step)+'px')});if(t)msg(t);save()}
+function openMenu(){$('welcome').classList.remove('hidden');$('continue').classList.toggle('hidden',!g||g.completed);updateProgress()}function updateProgress(){$('progress').textContent=WORLDS[$('difficulty').value].name+' · Level '+unlocked($('difficulty').value)+' freigeschaltet'}
+$('soundToggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;try{localStorage.setItem('solitaireAZ_sound',soundEnabled?'on':'off')}catch(e){}updateSoundButton();if(soundEnabled)playSound('unlock')});updateSoundButton();$('achievementsOpen').addEventListener('click',openAchievements);$('achievementsBack').addEventListener('click',()=>{$('achievementsOverlay').classList.add('hidden');$('welcome').classList.remove('hidden')});$('mapOpen').addEventListener('click',()=>openMap($('difficulty').value));$('mapBack').addEventListener('click',()=>{$('mapOverlay').classList.add('hidden');openMenu()});$('mapNext').addEventListener('click',()=>{mapPage++;renderMap()});$('mapPrev').addEventListener('click',()=>{mapPage=Math.max(0,mapPage-1);renderMap()});$('mapLandscape').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-maplevel]')){e.preventDefault();e.target.click()}});$('mapLandscape').addEventListener('click',e=>{const b=e.target.closest('[data-maplevel]');if(!b)return;const n=Number(b.dataset.maplevel);if(n>unlocked(mapDifficulty))return;mapSelected=n;renderMap()});$('mapPlay').addEventListener('click',()=>{if(mapSelected>unlocked(mapDifficulty))return;try{create(mapSelected,mapDifficulty);$('mapOverlay').classList.add('hidden')}catch(e){$('mapInfo').textContent='Level konnte nicht aufgebaut werden: '+e.message}});$('board').addEventListener('click',e=>{if(Date.now()<suppressClickUntil)return;let p=e.target.closest('[data-type]');if(p)tap(p.dataset.type,Number(p.dataset.i),Number(p.dataset.j))});$('start').addEventListener('click',()=>{try{create(unlocked($('difficulty').value),$('difficulty').value);$('welcome').classList.add('hidden')}catch(e){$('progress').textContent='Startfehler: '+e.message;console.error(e)}});$('continue').addEventListener('click',()=>{$('welcome').classList.add('hidden');render('Weiter geht’s!')});$('menu').addEventListener('click',openMenu);$('difficulty').addEventListener('change',updateProgress);$('hint').addEventListener('click',hint);$('undo').addEventListener('click',()=>{if(!history.length){msg('Kein Zug zum Zurücknehmen.');return}let used=g.hintsUsed;g=JSON.parse(history.pop());g.hintsUsed=Math.max(used,g.hintsUsed);selected=null;render('↶ Zurückgenommen. Hinweise bleiben verbraucht.')});$('restart').addEventListener('click',()=>dialog('Neu starten?','Dein aktueller Fortschritt im Level wird zurückgesetzt.',[['Neustart',()=>{hide();create(g.level,g.difficulty)}],['Abbrechen',hide]]));$('stock').addEventListener('click',()=>{if(!g||g.completed)return;if(!g.stock.length){if(!g.waste.length&&!(g.reserve||[]).length)return;snapshot();if((g.reserve||[]).length){g.stock=g.reserve.splice(0).reverse();render('🃏 Weitere Karten freigegeben – ohne Zugkosten.')}else{g.stock=g.waste.reverse();g.waste=[];render('🔄 Nachziehstapel wieder aufgefüllt – ohne Zugkosten.')}selected=null;return}snapshot();g.waste.push(g.stock.pop());selected=null;render('Neue Karte gezogen – ohne Zugkosten.');});$('waste').addEventListener('click',()=>{if(Date.now()>=suppressClickUntil)tap('waste',0,0)});
+
+// Fingersteuerung (Pointer Events): eine Karte oder eine zusammenhängende Gruppe ziehen.
+let drag=null, suppressClickUntil=0;
+function dragSelection(el){
+  if(!g||g.completed)return null;
+  let type=el.dataset.type,i=Number(el.dataset.i),j=Number(el.dataset.j);
+  return selection(type,i,j);
+}
+function dragTarget(x,y){
+  const under=document.elementFromPoint(x,y);
+  if(!under)return null;
+  const p=under.closest('[data-type]');
+  if(!p)return null;
+  const type=p.dataset.type;
+  if(type!=='found'&&type!=='cols')return null;
+  return {type,i:Number(p.dataset.i),el:p};
+}
+function cleanDrag(){
+  document.querySelectorAll('.drag-source,.drag-hover').forEach(el=>el.classList.remove('drag-source','drag-hover'));
+  document.querySelector('.drag-ghost')?.remove();
+  drag=null;
+}
+function pointerDown(e){
+  if(e.button!==undefined&&e.button!==0)return;
+  const el=e.target.closest('.card[data-type="cols"],#waste[data-type="waste"]');
+  if(!el||!g||g.completed||!$('welcome').classList.contains('hidden'))return;
+  const sel=dragSelection(el);if(!sel)return;
+  drag={sel,el,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,started:false,hover:null,id:e.pointerId};
+  // Capture on the board/waste keeps touch moves working even outside the card.
+  // Kein Pointer-Capture auf iOS: Touch-Fallback verwaltet die Bewegung global.
+}
+function pointerMove(e){
+  if(!drag||drag.id!==e.pointerId)return;
+  const d=drag;d.x=e.clientX;d.y=e.clientY;
+  if(!d.started&&Math.hypot(d.x-d.startX,d.y-d.startY)<9)return;
+  if(!d.started){
+    d.started=true;d.el.classList.add('drag-source');
+    let cards=chosenCards(d.sel),ghost=document.createElement('div');
+    ghost.className='drag-ghost';ghost.style.setProperty('--ghost-width',Math.round(d.el.getBoundingClientRect().width)+'px');
+    const face=document.createElement('div');face.className='ghost-card';
+    face.textContent=(cards[0].kind==='category'?'👑 ':'')+(cards[0].picture?cards[0].emoji+' ':'')+cards[0].word;
+    if(cards.length>1){const badge=document.createElement('span');badge.className='ghost-count';badge.textContent=cards.length+' Karten';face.append(badge)}
+    ghost.append(face);document.body.append(ghost);d.ghost=ghost;
+  }
+  e.preventDefault();
+  d.ghost.style.left=d.x+'px';d.ghost.style.top=d.y+'px';
+  if(d.hover)d.hover.classList.remove('drag-hover');
+  const target=dragTarget(d.x,d.y);
+  d.hover=target&&valid(d.sel,target)?target.el:null;
+  if(d.hover)d.hover.classList.add('drag-hover');
+}
+function pointerUp(e){
+  if(!drag||drag.id!==e.pointerId)return;
+  const d=drag;
+  if(d.started){
+    suppressClickUntil=Date.now()+450;
+    const target=dragTarget(e.clientX,e.clientY);
+    const moved=target&&move(d.sel,target);
+    cleanDrag();
+    if(!moved)msg('Hier passt die Karte nicht. Versuche ein anderes Feld.');
+  }else cleanDrag();
+}
+$('board').addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')pointerDown(e)});
+$('waste').addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')pointerDown(e)});
+window.addEventListener('pointermove',e=>{if(e.pointerType!=='touch')pointerMove(e)},{passive:false});
+window.addEventListener('pointerup',e=>{if(e.pointerType!=='touch')pointerUp(e)});
+window.addEventListener('pointercancel',e=>{if(e.pointerType!=='touch')cleanDrag()});
+
+// iPhone/iPad: native Touch Events als zuverlässige Drag-Steuerung.
+// touch-action:none verhindert Scrollen beim Greifen einer Karte.
+let touchId=null;
+function touchPoint(list,id){for(const t of list)if(t.identifier===id)return t;return null}
+function onTouchStart(e){
+  if(drag||!e.changedTouches.length)return;
+  const t=e.changedTouches[0];
+  const el=e.target.closest('.card[data-type="cols"],#waste[data-type="waste"]');
+  if(!el||!g||g.completed||!$('welcome').classList.contains('hidden'))return;
+  const sel=dragSelection(el);if(!sel)return;
+  touchId=t.identifier;
+  drag={sel,el,startX:t.clientX,startY:t.clientY,x:t.clientX,y:t.clientY,started:false,hover:null,id:touchId};
+  e.preventDefault();
+}
+function onTouchMove(e){
+  if(touchId===null||!drag)return;
+  const t=touchPoint(e.changedTouches,touchId);if(!t)return;
+  e.preventDefault();
+  pointerMove({pointerId:touchId,clientX:t.clientX,clientY:t.clientY,preventDefault(){}});
+}
+function onTouchEnd(e){
+  if(touchId===null)return;
+  const t=touchPoint(e.changedTouches,touchId);if(!t)return;
+  e.preventDefault();
+  const wasDrag=!!drag?.started;const sel=drag?.sel;
+  pointerUp({pointerId:touchId,clientX:t.clientX,clientY:t.clientY});
+  touchId=null;
+  if(!wasDrag&&sel)tap(sel.type,sel.i,sel.j);
+}
+function onTouchCancel(){touchId=null;cleanDrag()}
+$('board').addEventListener('touchstart',onTouchStart,{passive:false});
+$('waste').addEventListener('touchstart',onTouchStart,{passive:false});
+window.addEventListener('touchmove',onTouchMove,{passive:false});
+window.addEventListener('touchend',onTouchEnd,{passive:false});
+window.addEventListener('touchcancel',onTouchCancel,{passive:false});
+
+try{let s=JSON.parse(localStorage.getItem(SAVE)||'null');if(s&&CFG[s.difficulty]&&Array.isArray(s.cols)&&s.cols.length===CFG[s.difficulty].n&&Array.isArray(s.slotGroups)&&s.slotGroups.length===CFG[s.difficulty].n&&Array.isArray(s.completedGroups)&&Array.isArray(s.found)){g=s;$('difficulty').value=g.difficulty;render('Willkommen zurück!')}}catch(e){console.warn('Spielstand konnte nicht geladen werden',e)}updateProgress();setTimeout(()=>{if(!$('mapOverlay').classList.contains('hidden'))return;openMap($('difficulty').value)},0);window.addEventListener('resize',()=>{if(g)render()});
+// Reparatur 9.5.1: alte Offline-Caches entfernen statt fehlerhafte Seiten zu speichern.
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.filter(r=>r.scope.includes('/solitaire-a-z/')).map(r=>r.unregister()))).catch(()=>{});}
+if('caches' in window){caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('solitaire-az-')).map(k=>caches.delete(k)))).catch(()=>{});}
+</script></body></html>
